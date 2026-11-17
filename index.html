@@ -1299,6 +1299,24 @@ p{margin:0}
 .cur0 .meta a{color:#d4f000}
 .cur0 figure{margin:0;max-width:1280px;width:100%;justify-self:center;border-radius:14px;overflow:hidden;border:1px solid var(--shell-line);box-shadow:0 30px 80px -30px #000}
 .cur0 img{width:100%;height:auto}
+
+/* ================= 11 FLOODLIGHT · LIME — 07 layout with the current FASTHIT palette ================= */
+.k11{--bg:#080d18;--bg2:#0f1830;--panel:#111a2d;--line:#202c45;--fg:#f3f5fa;--mute:#9aa6bd;--acc:#d4f000;--acc-ink:#0b1220;--ok:#2fbf71;--mid:#f2b705;--bad:#ef5350;
+  --card-bg:#111a2d;--card-fg:#f3f5fa;--card-row:#16213c;--card-track:#202c45;--note-bg:#d4f000;--note-fg:#0b1220}
+.k11 .hero .bgimg img{filter:saturate(1.05) brightness(.95)}
+.k11 .hero .bgimg::after{background:linear-gradient(90deg,var(--bg) 0%,#080d18e6 30%,#080d1833 65%,transparent),radial-gradient(60% 50% at 70% 10%,#d4f0001f,transparent)}
+@media (max-width:940px){.k11 .hero .bgimg::after{background:linear-gradient(180deg,#080d18ee,#080d1899 50%,#080d18ee)}}
+.k11 .hero .sub{color:#d5dbe7}
+.k11 .chiprow span{background:#080d18cc}
+.k11 .logo i{background:radial-gradient(circle at 35% 35%,#f6ffc2,var(--acc) 45%,#8fa300);box-shadow:0 0 22px #d4f00066}
+.k11 .hero .floatcard{border:1px solid var(--line)}
+.k11 .phone{background:#04070e;box-shadow:0 0 0 1px var(--line),0 40px 90px -30px #000,0 0 80px -30px #d4f00044}
+.k11 .jt{fill:#080d18}
+.k11 .st .im img{filter:none}
+.k11 .see .pts div::before{box-shadow:0 0 12px #d4f00099}
+.k11 .age.on span,.k11 .pl.hot .role,.k11 .pl.hot .capl{color:#3d4600}
+.k11 .about p{color:#c3cbda}
+.k11 .final{background:radial-gradient(50% 70% at 50% 0%,#d4f00026,transparent),var(--bg)}
 </style>
 
 <header class="switch">
@@ -1317,6 +1335,7 @@ p{margin:0}
       <a href="#fuchsia" data-k="fuchsia"><b>08</b>Fuchsia Power</a>
       <a href="#graphite" data-k="graphite"><b>09</b>Graphite Lab</a>
       <a href="#lavender" data-k="lavender"><b>10</b>Lavender Rush</a>
+      <a href="#night" data-k="night"><b>11</b>Floodlight Lime</a>
     </nav>
     <button class="menu-t" id="menuT" type="button" aria-controls="tabs" aria-expanded="true" aria-label="Hide landing options" title="Hide landing options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
   </div>
@@ -2280,6 +2299,9 @@ p{margin:0}
    {k:'floodlight',cls:'k7',n:'07',
     brief:['07 · Floodlight: noche de juego, luz de estadio','La versión más cercana a Pinch en estructura y energía: foto a sangre en el hero, titulares condensados y un solo botón. Cambia el negro y rojo por petróleo profundo y ámbar de reflector, que se siente cálido y propio del softbol nocturno.',[['#06191a','Petrol'],['#0f2e2f','Panel'],['#ffb340','Floodlight'],['#f4efe4','Bone'],['#ff6a57','Review']],'Saira Extra Condensed (titulares) · Onest (texto)'],
     h1:'See what your swing <span>needs this week.</span>'},
+   {k:'night',cls:'k7 k11',n:'11',
+    brief:['11 · Floodlight Lime: estilo 07 con los colores de FASTHIT','La estructura y la energía de Floodlight (foto a sangre, titulares condensados, un solo botón, pasos con imagen y planes) con la paleta actual de la marca: navy oscuro, superficies azul profundo y acento verde lima. Mantiene el reconocimiento de marca y gana la claridad comercial de la 07.',[['#080d18','Bg'],['#111a2d','Surface'],['#d4f000','Accent'],['#f3f5fa','Ink'],['#9aa6bd','Muted']],'Saira Extra Condensed (titulares) · Onest (texto)'],
+    h1:'See what your swing <span>needs this week.</span>'},
    {k:'fuchsia',cls:'k8',n:'08',
     brief:['08 · Fuchsia Power: fuerza femenina, luminosa','Blanco, fucsia intenso y ciruela profundo. Habla directo a jugadoras y familias de softbol con la energía de las marcas deportivas femeninas actuales. La foto del hero va en un marco redondeado con degradado fucsia y la tarjeta encima; la sección de edades va en ciruela.',[['#ffffff','White'],['#e5137f','Fuchsia'],['#2a0c3e','Plum'],['#ff9ccc','Blush'],['#fff1f8','Mist']],'Anybody expanded (titulares) · Plus Jakarta Sans (texto)'],
     h1:'Your swing. <span>Your age.</span> Your next step.'},
@@ -2292,11 +2314,11 @@ p{margin:0}
   ];
 
   function heroArt(c){
-    if(c.k==='floodlight') return '<div class="bgimg"><img src="img/swing.jpg" alt="A softball player swinging under stadium lights"></div>';
+    if((c.k==='floodlight'||c.k==='night')) return '<div class="bgimg"><img src="img/swing.jpg" alt="A softball player swinging under stadium lights"></div>';
     return '';
   }
   function heroRight(c){
-    if(c.k==='floodlight') return '<div class="floatcard" style="overflow:hidden">'+card()+'</div>';
+    if((c.k==='floodlight'||c.k==='night')) return '<div class="floatcard" style="overflow:hidden">'+card()+'</div>';
     if(c.k==='fuchsia') return '<div class="heroimg"><span class="ring"></span><img src="img/swing.jpg" alt="A softball player mid-swing"><div class="floatcard" style="overflow:hidden">'+card()+'</div></div>';
     if(c.k==='lavender') return '<div class="blob"><span class="disc"></span><div class="ph"><img src="img/swing.jpg" alt="A softball player mid-swing"></div><span class="stk">Ages <b>6–18+</b></span><div class="floatcard">'+card()+'</div></div>';
     return '<div class="frame"><span class="corner cA"></span><span class="corner cB"></span><div class="vid"><img src="img/swing.jpg" alt="A softball player mid-swing with measured pose lines"><svg viewBox="0 0 1152 864" aria-hidden="true">'+SK+'<path d="M520 300 A 70 70 0 0 1 600 250" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 8"/></svg><span class="rd r1">TIME TO CONTACT<b>MODERATE</b></span><span class="rd r2">FRONT KNEE<b>REVIEW</b></span></div><div class="bar"><span>LOAD</span><span>LAUNCH</span><span>CONTACT</span><span>FINISH</span></div><div class="floatcard">'+card()+'</div></div>';
@@ -2344,7 +2366,7 @@ p{margin:0}
 <script>
 (function(){
   var s=document.getElementById('seats100'); if(s){var h='';for(var i=0;i<100;i++)h+='<i></i>';s.innerHTML=h;}
-  var keys=['current','stitch','frame','dugout','chalkline','aura','cutout','floodlight','fuchsia','graphite','lavender'];
+  var keys=['current','stitch','frame','dugout','chalkline','aura','cutout','floodlight','fuchsia','graphite','lavender','night'];
   var sw=document.querySelector('.switch'),btn=document.getElementById('menuT'),cn=document.getElementById('curname');
   function cur(){var k=(location.hash||'').slice(1);return keys.indexOf(k)<0?'current':k;}
   function show(){
