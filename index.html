@@ -1,0 +1,1795 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Fast-Hit Landing Concepts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Caveat:wght@700&family=Archivo:wdth,wght@62..125,400..900&family=Syne:wght@600;700;800&family=Inter+Tight:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@500;600&display=swap">
+<style>
+/* Shell: a dark switcher bar on top, then one full landing concept per tab (single-look pages by design). */
+:root{
+  --shell-bg:#0d0f1c; --shell-fg:#eef0ff; --shell-mute:#9aa0c3; --shell-line:#2a2e4a;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--shell-bg);color:var(--shell-fg);font-family:Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+:focus-visible{outline:3px solid #6ea8ff;outline-offset:3px}
+
+/* ---------- Switcher ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--shell-bg)}
+.switch{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--shell-bg);border-bottom:1px solid var(--shell-line)}
+.switch .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.switch .lbl{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--shell-mute)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs a{text-decoration:none;font:600 14px/1 Figtree,sans-serif;padding:9px 14px;border-radius:999px;color:var(--shell-mute);border:1px solid var(--shell-line);display:flex;gap:8px;align-items:center}
+.tabs a b{font:600 11px/1 "JetBrains Mono",monospace;opacity:.7}
+.tabs a[aria-current="page"]{background:var(--shell-fg);color:var(--shell-bg);border-color:var(--shell-fg)}
+.brief{background:#151830;border-bottom:1px solid var(--shell-line)}
+.brief .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;padding-block:18px;align-items:center}
+.brief h2{margin:0 0 6px;font:700 20px/1.2 Figtree,sans-serif}
+.brief p{margin:0;color:var(--shell-mute);font-size:14px;line-height:1.55;max-width:62ch}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.sw{display:flex;flex-direction:column;gap:5px;font:500 10px/1.2 "JetBrains Mono",monospace;color:var(--shell-mute);width:64px}
+.sw i{height:34px;border-radius:8px;border:1px solid #ffffff22}
+.fonts{grid-column:1/-1;font:500 12px/1.4 "JetBrains Mono",monospace;color:var(--shell-mute)}
+@media (max-width:760px){.brief .wrap{grid-template-columns:1fr}.swatches{justify-content:flex-start}}
+
+.concept{overflow:hidden}
+.concept[hidden]{display:none!important}
+section{padding-block:clamp(56px,8vw,104px)}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+
+/* ---------- Shared score card (styled per concept via tokens) ---------- */
+.card{background:var(--card-bg);color:var(--card-fg);border-radius:var(--card-r,22px);padding:18px;display:grid;gap:12px;font-family:var(--card-font);width:100%}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card .who{font-size:13px;font-weight:700}
+.card .who small{display:block;font-weight:500;opacity:.65;font-size:11px;margin-top:2px}
+.card .ver{font:500 9px/1 "JetBrains Mono",monospace;opacity:.55;letter-spacing:.06em}
+.card .power{display:flex;align-items:baseline;gap:6px}
+.card .power strong{font:var(--power-font);line-height:.85;letter-spacing:-.02em}
+.card .power span{font-size:12px;opacity:.7;font-weight:600}
+.card .lab{font:600 10px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+.card ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.card li{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;padding:7px 10px;border-radius:10px;background:var(--row-bg)}
+.pill{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:999px;white-space:nowrap}
+.ok{background:var(--ok-bg);color:var(--ok-fg)}
+.mid{background:var(--mid-bg);color:var(--mid-fg)}
+.bad{background:var(--bad-bg);color:var(--bad-fg)}
+.card .drill{font-size:12px;line-height:1.4;padding:10px;border-radius:12px;background:var(--drill-bg);color:var(--drill-fg)}
+.card .drill b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.card .sep{font:600 9.5px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:2px}
+
+/* =========================================================
+   CONCEPT 1 — STITCH  (ballpark daylight: optic-yellow ball, red stitching, uniform navy)
+   ========================================================= */
+.c1{
+  --bg:#f4f7fb; --paper:#ffffff; --ink:#0f1c4d; --ink-2:#4a5680; --ball:#e8ff47; --stitch:#e5322d; --sky:#dbe8ff; --line:#d8e0ee;
+  --f-d:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif; --f-b:Figtree,system-ui,sans-serif;
+  --card-bg:#ffffff; --card-fg:#0f1c4d; --card-font:Figtree,sans-serif; --power-font:900 64px/1 "Big Shoulders Display",Impact,sans-serif;
+  --row-bg:#f2f5fb; --ok-bg:#e8ff47; --ok-fg:#0f1c4d; --mid-bg:#dbe8ff; --mid-fg:#1b3aa8; --bad-bg:#ffe1df; --bad-fg:#b3201b; --drill-bg:#0f1c4d; --drill-fg:#fff;
+  background:var(--bg);color:var(--ink);font-family:var(--f-b)
+}
+.c1 nav{display:flex;justify-content:space-between;align-items:center;padding-block:20px;gap:16px}
+.c1 .logo{font:900 30px/1 var(--f-d);letter-spacing:.01em;display:flex;align-items:center;gap:8px;text-transform:uppercase}
+.c1 .logo i{width:26px;height:26px;border-radius:50%;background:var(--ball);box-shadow:inset 0 0 0 2px var(--ink);position:relative}
+.c1 .logo i::after{content:"";position:absolute;inset:4px -6px;border:2px dashed var(--stitch);border-radius:50%;border-top-color:transparent;border-bottom-color:transparent}
+.c1 .links{display:flex;gap:26px;font-weight:600;font-size:15px}
+.c1 .links a{text-decoration:none}
+.c1 .btn{display:inline-flex;align-items:center;gap:10px;font:800 17px/1 var(--f-d);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border-radius:999px;background:var(--ink);color:#fff;border:2px solid var(--ink)}
+.c1 .btn.alt{background:transparent;color:var(--ink)}
+.c1 .btn.ball{background:var(--ball);color:var(--ink)}
+@media (max-width:820px){.c1 .links{display:none}}
+
+.c1 .hero{padding-block:24px 80px;position:relative}
+.c1 .hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.c1 .eyebrow{font:700 13px/1 var(--f-b);letter-spacing:.16em;text-transform:uppercase;color:var(--stitch);display:flex;align-items:center;gap:10px}
+.c1 .eyebrow::before{content:"";width:34px;border-top:3px dashed var(--stitch)}
+.c1 h1{font:900 clamp(58px,9.4vw,132px)/.84 var(--f-d);text-transform:uppercase;letter-spacing:-.01em;margin-top:18px}
+.c1 h1 em{font-style:normal;background:linear-gradient(transparent 58%,var(--ball) 58%,var(--ball) 92%,transparent 92%);padding-inline:.04em}
+.c1 .lede{font-size:clamp(17px,1.6vw,20px);line-height:1.55;color:var(--ink-2);max-width:46ch;margin-top:22px}
+.c1 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.c1 .trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.c1 .trust span{display:flex;gap:8px;align-items:center}
+.c1 .trust span::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--stitch)}
+.c1 .ballstage{position:relative;aspect-ratio:1;max-width:560px;width:100%;justify-self:center}
+.c1 .ballphoto{position:absolute;inset:6%;border-radius:50%;overflow:hidden;box-shadow:0 0 0 14px var(--ball),0 30px 60px -20px #0f1c4d66}
+.c1 .ballphoto img{width:100%;height:100%;object-fit:cover;object-position:52% 40%}
+.c1 .stitchsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.c1 .floatcard{position:absolute;right:-4%;bottom:2%;width:min(250px,52%);transform:rotate(3deg);box-shadow:0 24px 50px -18px #0f1c4d70;border-radius:22px}
+.c1 .chip{position:absolute;left:-2%;top:12%;background:var(--ink);color:#fff;border-radius:999px;padding:10px 16px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center;transform:rotate(-4deg)}
+.c1 .chip b{color:var(--ball);font:900 22px/1 var(--f-d)}
+@media (max-width:900px){.c1 .hero-grid{grid-template-columns:1fr}.c1 .floatcard{right:0}}
+
+.c1 .tape{background:var(--ink);color:#fff;overflow:hidden;padding-block:16px;white-space:nowrap}
+.c1 .tape div{display:inline-flex;gap:38px;font:800 26px/1 var(--f-d);text-transform:uppercase;letter-spacing:.06em;animation:c1scroll 34s linear infinite}
+.c1 .tape span{display:inline-flex;gap:38px;align-items:center}
+.c1 .tape span::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--ball)}
+@keyframes c1scroll{to{transform:translateX(-50%)}}
+
+.c1 .sec-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:44px}
+.c1 h2{font:900 clamp(44px,6vw,84px)/.88 var(--f-d);text-transform:uppercase}
+.c1 .sec-head p{max-width:42ch;color:var(--ink-2);font-size:17px;line-height:1.55}
+.c1 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.c1 .step{background:var(--paper);border-radius:28px;padding:28px;border:1px solid var(--line);display:grid;gap:14px;align-content:start;position:relative}
+.c1 .step .n{font:900 76px/.8 var(--f-d);color:var(--sky);-webkit-text-stroke:2px var(--ink)}
+.c1 .step h3{font:800 30px/1 var(--f-d);text-transform:uppercase;letter-spacing:.01em}
+.c1 .step p{color:var(--ink-2);line-height:1.55}
+.c1 .step .meta{font:600 12px/1.3 "JetBrains Mono",monospace;color:var(--stitch)}
+@media (max-width:820px){.c1 .steps{grid-template-columns:1fr}}
+
+.c1 .profiles{background:var(--sky)}
+.c1 .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.c1 .pcard{background:var(--paper);border-radius:28px;overflow:hidden;display:flex;flex-direction:column;border:2px solid var(--ink)}
+.c1 .pcard.feature{background:var(--ink);color:#fff}
+.c1 .pcard .ph{aspect-ratio:4/3;position:relative}
+.c1 .pcard .ph img{width:100%;height:100%;object-fit:cover}
+.c1 .pcard .big{position:absolute;left:14px;bottom:-34px;width:84px;height:84px;border-radius:50%;background:var(--ball);color:var(--ink);display:grid;place-items:center;font:900 46px/1 var(--f-d);border:3px solid var(--ink)}
+.c1 .pcard .body{padding:48px 22px 24px;display:flex;flex-direction:column;gap:12px;flex:1}
+.c1 .pcard h3{font:800 32px/1 var(--f-d);text-transform:uppercase}
+.c1 .pcard .cap{font:700 13px/1.3 var(--f-b);letter-spacing:.06em;text-transform:uppercase;color:var(--stitch)}
+.c1 .pcard.feature .cap{color:var(--ball)}
+.c1 .pcard ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;font-size:14.5px;line-height:1.4;flex:1}
+.c1 .pcard li{display:flex;gap:10px}
+.c1 .pcard li::before{content:"";flex:none;width:14px;height:14px;margin-top:3px;border-radius:50%;border:2px dashed var(--stitch)}
+.c1 .pcard .btn{justify-content:center;margin-top:8px;font-size:15px;padding:13px 16px}
+.c1 .pcard.feature .btn{background:var(--ball);color:var(--ink);border-color:var(--ball)}
+@media (max-width:1040px){.c1 .pgrid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.c1 .pgrid{grid-template-columns:1fr}}
+
+.c1 .compare{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
+.c1 .cmp{background:var(--paper);border:2px solid var(--ink);border-radius:30px;padding:26px;display:grid;gap:18px}
+.c1 .cmp .scores{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;text-align:center}
+.c1 .cmp .sc{border-radius:22px;padding:16px;background:var(--bg)}
+.c1 .cmp .sc.now{background:var(--ball)}
+.c1 .cmp .sc small{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.c1 .cmp .sc b{display:block;font:900 72px/.9 var(--f-d);margin-top:6px}
+.c1 .cmp .arrow{font:900 30px/1 var(--f-d);color:var(--stitch)}
+.c1 .cmp table{width:100%;border-collapse:collapse;font-size:14px}
+.c1 .cmp td{color:var(--ink);font-size:14px;padding:10px 4px;border-top:1px dashed var(--line)}
+.c1 .cmp td:last-child{text-align:right;font-weight:700}
+.c1 .up{color:#147a3f}.c1 .held{color:var(--ink-2)}
+.c1 .ages{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.c1 .ages span{border:2px solid var(--ink);border-radius:999px;padding:9px 14px;font-weight:700;font-size:14px}
+.c1 .ages span b{font-family:var(--f-d);font-size:18px;margin-left:6px}
+@media (max-width:900px){.c1 .compare{grid-template-columns:1fr}}
+
+.c1 .final{background:var(--ball);text-align:center;position:relative;overflow:hidden}
+.c1 .final h2{font-size:clamp(54px,9vw,140px)}
+.c1 .final p{font-size:18px;margin:18px auto 30px;max-width:48ch;color:var(--ink)}
+.c1 .final .stitchbg{position:absolute;inset:-20% -10%;width:120%;height:140%;pointer-events:none;opacity:.9}
+.c1 .final .wrap{position:relative}
+.c1 footer{padding-block:28px;font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* =========================================================
+   CONCEPT 2 — FRAME  (motion lab: indigo night, pose skeleton, timecodes)
+   ========================================================= */
+.c2{
+  --bg:#11123a; --bg-2:#191b4d; --panel:#1f2260; --fg:#eceaff; --mute:#a6a6d6; --coral:#ff6a55; --mint:#5df2c4; --line:#2f3275;
+  --f-d:Unbounded,"Arial Black",sans-serif; --f-b:Manrope,system-ui,sans-serif; --f-m:"JetBrains Mono",ui-monospace,monospace;
+  --card-bg:#f4f3ff; --card-fg:#11123a; --card-font:Manrope,sans-serif; --power-font:800 56px/1 Unbounded,sans-serif; --card-r:20px;
+  --row-bg:#e7e6fb; --ok-bg:#5df2c4; --ok-fg:#0b3a2d; --mid-bg:#d8d6ff; --mid-fg:#3a33b8; --bad-bg:#ffd9d3; --bad-fg:#b52a17; --drill-bg:#11123a; --drill-fg:#eceaff;
+  background:var(--bg);color:var(--fg);font-family:var(--f-b)
+}
+.c2 nav{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px}
+.c2 .logo{font:800 20px/1 var(--f-d);display:flex;align-items:center;gap:10px;letter-spacing:-.01em}
+.c2 .logo i{width:28px;height:28px;border-radius:8px;background:conic-gradient(var(--coral) 0 25%,var(--mint) 0 50%,var(--coral) 0 75%,var(--mint) 0);mask:radial-gradient(circle at center,transparent 6px,#000 6.5px)}
+.c2 .links{display:flex;gap:28px;font-size:14px;color:var(--mute);font-weight:600}
+.c2 .links a{text-decoration:none}
+.c2 .btn{display:inline-flex;align-items:center;gap:10px;font:700 15px/1 var(--f-b);text-decoration:none;padding:14px 20px;border-radius:12px;background:var(--coral);color:#1a0d0a}
+.c2 .btn.ghost{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--line)}
+.c2 .btn.sm{padding:11px 16px;font-size:14px}
+@media (max-width:820px){.c2 .links{display:none}}
+
+.c2 .hero{padding-block:20px 90px}
+.c2 .hero-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.c2 .tc{font:600 12px/1 var(--f-m);color:var(--mint);letter-spacing:.12em;text-transform:uppercase;display:flex;gap:10px;align-items:center}
+.c2 .tc::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral);animation:c2blink 1.4s steps(2) infinite}
+@keyframes c2blink{50%{opacity:.2}}
+.c2 h1{font:800 clamp(40px,5.6vw,78px)/1 var(--f-d);letter-spacing:-.035em;margin-top:20px}
+.c2 h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--fg)}
+.c2 h1 .m{color:var(--mint)}
+.c2 .lede{font-size:18px;line-height:1.6;color:var(--mute);max-width:44ch;margin-top:22px}
+.c2 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.c2 .facts{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:28px;margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}
+.c2 .facts b{font:700 22px/1 var(--f-d);display:block}
+.c2 .facts span{font:500 11px/1.3 var(--f-m);color:var(--mute);letter-spacing:.06em;text-transform:uppercase}
+.c2 .viewer{position:relative;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 40px 80px -30px #000c;aspect-ratio:1152/864;max-width:100%}
+.c2 .viewer img{width:100%;height:100%;object-fit:cover;filter:saturate(.75) contrast(1.05)}
+.c2 .viewer::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#11123a00 50%,#11123acc);pointer-events:none}
+.c2 .viewer svg{position:absolute;inset:0;width:100%;height:100%;z-index:2}
+.c2 .bone{stroke:var(--mint);stroke-width:7;stroke-linecap:round;fill:none;stroke-dasharray:420;animation:c2draw 1.6s ease-out both}
+.c2 .joint{fill:var(--bg);stroke:var(--coral);stroke-width:5}
+.c2 .arc{fill:none;stroke:var(--coral);stroke-width:4;stroke-dasharray:6 8}
+.c2 .bat{stroke:#ffffffaa;stroke-width:3;stroke-dasharray:4 6;fill:none}
+@keyframes c2draw{from{stroke-dashoffset:420}to{stroke-dashoffset:0}}
+.c2 .hud{position:absolute;z-index:3;font:600 11px/1.2 var(--f-m);letter-spacing:.06em;background:#11123ad9;border:1px solid #ffffff22;backdrop-filter:blur(6px);color:var(--fg);padding:8px 10px;border-radius:10px}
+.c2 .hud b{display:block;font:700 18px/1.1 var(--f-d);letter-spacing:-.02em;margin-top:3px}
+.c2 .hud.a{left:3%;top:4%}.c2 .hud.b{right:3%;top:30%}.c2 .hud.c{left:3%;top:52%}
+.c2 .hud .k{color:var(--mint)}.c2 .hud .w{color:var(--coral)}
+.c2 .scrub{position:absolute;z-index:3;left:3%;right:3%;bottom:4%;display:grid;gap:8px}
+.c2 .scrub .bar{height:30px;border-radius:8px;background:repeating-linear-gradient(90deg,#ffffff26 0 2px,transparent 2px 10px);position:relative;border:1px solid #ffffff2a}
+.c2 .scrub .bar i{position:absolute;top:-4px;bottom:-4px;left:64%;width:3px;background:var(--coral);border-radius:2px;box-shadow:0 0 0 4px #ff6a5533}
+.c2 .scrub .bar em{position:absolute;inset:0 36% 0 38%;background:#5df2c42a;border-left:2px solid var(--mint);border-right:2px solid var(--mint)}
+.c2 .scrub .t{display:flex;justify-content:space-between;font:600 10.5px/1 var(--f-m);color:var(--mute)}
+@media (max-width:960px){.c2 .hero-grid{grid-template-columns:1fr}}
+@media (max-width:520px){.c2 .hud.c{display:none}.c2 .hud{font-size:9.5px}.c2 .hud b{font-size:14px}}
+
+.c2 .lbl{font:600 12px/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
+.c2 h2{font:800 clamp(32px,4.2vw,56px)/1.04 var(--f-d);letter-spacing:-.035em;margin-top:14px}
+.c2 .sub{color:var(--mute);font-size:17px;line-height:1.6;max-width:52ch;margin-top:16px}
+
+.c2 .signals{background:var(--bg-2)}
+.c2 .sig-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:22px;overflow:hidden;margin-top:44px}
+.c2 .sig{background:var(--bg-2);padding:24px 20px;display:grid;gap:10px;align-content:start}
+.c2 .sig .g{font:600 10.5px/1 var(--f-m);letter-spacing:.1em;text-transform:uppercase}
+.c2 .sig.pw .g{color:var(--mint)}.c2 .sig.cr .g{color:var(--coral)}
+.c2 .sig h3{font:700 20px/1.1 var(--f-d);letter-spacing:-.02em}
+.c2 .sig p{font-size:14px;line-height:1.5;color:var(--mute)}
+.c2 .sig .w{font:700 13px/1 var(--f-m);color:var(--fg)}
+.c2 .sig svg{width:54px;height:54px}
+.c2 .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font:600 12px/1 var(--f-m);color:var(--mute)}
+.c2 .legend span{display:flex;gap:8px;align-items:center}
+.c2 .legend i{width:12px;height:12px;border-radius:4px}
+@media (max-width:1000px){.c2 .sig-grid{grid-template-columns:repeat(2,1fr)}.c2 .sig:last-child{grid-column:1/-1}}
+@media (max-width:520px){.c2 .sig-grid{grid-template-columns:1fr}}
+
+.c2 .two{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.c2 .phone{width:min(300px,100%);justify-self:center;background:#07081f;border-radius:40px;padding:12px;box-shadow:0 0 0 1px var(--line),0 40px 80px -30px #000}
+.c2 .phone .notch{width:90px;height:22px;background:#07081f;border-radius:0 0 14px 14px;margin:-12px auto 6px}
+.c2 .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative;padding-top:10px}
+.c2 .pair .card{transform:none}
+.c2 .pair .card:first-child{opacity:.78}
+.c2 .delta{position:absolute;left:50%;top:-18px;transform:translateX(-50%);z-index:2;background:var(--coral);color:#1a0d0a;font:800 16px/1 var(--f-d);padding:10px 14px;border-radius:999px;box-shadow:0 10px 30px -8px #ff6a55aa;white-space:nowrap}
+@media (max-width:960px){.c2 .two{grid-template-columns:1fr}}
+@media (max-width:560px){.c2 .pair{grid-template-columns:1fr}.c2 .delta{top:-14px}}
+
+.c2 .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
+.c2 .tier{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.c2 .tier.hl{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.c2 .tier .ttop{display:flex;justify-content:space-between;align-items:center}
+.c2 .tier .role{font:700 11px/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase;color:var(--mint)}
+.c2 .tier.hl .role{color:#3a33b8}
+.c2 .tier .ava{width:46px;height:46px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--coral)}
+.c2 .tier h3{font:800 34px/1 var(--f-d);letter-spacing:-.04em}
+.c2 .tier .cap{font-size:14px;color:var(--mute);line-height:1.4;min-height:40px}
+.c2 .tier.hl .cap{color:#4b4b80}
+.c2 .seats{height:64px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:3px}
+.c2 .seats i{width:8px;height:8px;border-radius:2px;background:var(--mint)}
+.c2 .seats.lg i{width:20px;height:20px;border-radius:6px}
+.c2 .seats.xs{gap:2px}.c2 .seats.xs i{width:5px;height:5px;border-radius:1px}
+.c2 .tier.hl .seats i{background:#3a33b8}
+.c2 .seats.inf{align-items:center;font:800 54px/1 var(--f-d);color:var(--coral)}
+.c2 .tier ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:14px;line-height:1.4;flex:1}
+.c2 .tier li{padding-left:20px;position:relative}
+.c2 .tier li::before{content:"";position:absolute;left:0;top:6px;width:9px;height:9px;border-radius:50%;border:2px solid var(--coral)}
+.c2 .tier .btn{justify-content:center}
+.c2 .tier:not(.hl) .btn{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--line)}
+@media (max-width:1040px){.c2 .tiers{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.c2 .tiers{grid-template-columns:1fr}}
+
+.c2 .final{text-align:center;background:radial-gradient(60% 80% at 50% 0%,#2a2d86,transparent),var(--bg)}
+.c2 .final h2{font-size:clamp(36px,5.6vw,76px)}
+.c2 .final p{margin:18px auto 30px;color:var(--mute);font-size:18px;max-width:46ch}
+.c2 .final .ctas{justify-content:center;display:flex;gap:12px;flex-wrap:wrap}
+.c2 footer{border-top:1px solid var(--line);padding-block:26px;font:500 12px/1.4 var(--f-m);color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* =========================================================
+   CONCEPT 3 — DUGOUT  (team sticker pack: bubblegum, sky, highlighter, thick ink)
+   ========================================================= */
+.c3{
+  --bg:#fbf9ff; --ink:#1a1240; --pink:#ff7ab8; --sky:#9ad8ff; --hi:#efff5a; --lilac:#c9b8ff; --white:#ffffff; --mute:#5b5480;
+  --f-d:"Bricolage Grotesque","Arial Black",sans-serif; --f-b:"DM Sans",system-ui,sans-serif; --f-h:Caveat,"Comic Sans MS",cursive;
+  --card-bg:#ffffff; --card-fg:#1a1240; --card-font:"DM Sans",sans-serif; --power-font:800 62px/1 "Bricolage Grotesque",sans-serif; --card-r:24px;
+  --row-bg:#f3f0ff; --ok-bg:#efff5a; --ok-fg:#1a1240; --mid-bg:#9ad8ff; --mid-fg:#1a1240; --bad-bg:#ff7ab8; --bad-fg:#1a1240; --drill-bg:#c9b8ff; --drill-fg:#1a1240;
+  background:var(--bg);color:var(--ink);font-family:var(--f-b);
+  --sh:5px 5px 0 var(--ink)
+}
+.c3 .ol{border:2.5px solid var(--ink);box-shadow:var(--sh)}
+.c3 nav{display:flex;justify-content:space-between;align-items:center;padding-block:20px;gap:16px}
+.c3 .logo{font:800 28px/1 var(--f-d);letter-spacing:-.04em;display:flex;align-items:center;gap:6px}
+.c3 .logo span{background:var(--hi);border:2.5px solid var(--ink);border-radius:10px;padding:2px 8px;transform:rotate(-4deg);display:inline-block}
+.c3 .links{display:flex;gap:8px}
+.c3 .links a{text-decoration:none;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px;border:2px solid transparent}
+.c3 .links a:hover{border-color:var(--ink)}
+.c3 .btn{display:inline-flex;align-items:center;gap:8px;font:800 16px/1 var(--f-d);text-decoration:none;padding:14px 22px;border-radius:999px;background:var(--pink);color:var(--ink);border:2.5px solid var(--ink);box-shadow:var(--sh);transition:transform .15s,box-shadow .15s}
+.c3 .btn:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--ink)}
+.c3 .btn.w{background:var(--white)}
+.c3 .btn.y{background:var(--hi)}
+@media (max-width:820px){.c3 .links{display:none}}
+
+.c3 .hero{padding-block:30px 90px;position:relative}
+.c3 .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.c3 .tag{display:inline-flex;gap:8px;align-items:center;background:var(--sky);border:2.5px solid var(--ink);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px;transform:rotate(-2deg)}
+.c3 h1{font:800 clamp(52px,8vw,112px)/.9 var(--f-d);letter-spacing:-.055em;margin-top:22px}
+.c3 h1 .hl{background:var(--hi);border:3px solid var(--ink);border-radius:20px;padding:0 .12em;display:inline-block;transform:rotate(-2deg);box-shadow:var(--sh)}
+.c3 h1 .pk{color:var(--pink);-webkit-text-stroke:2.5px var(--ink)}
+.c3 .lede{font-size:19px;line-height:1.55;color:var(--mute);max-width:44ch;margin-top:26px}
+.c3 .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.c3 .stage{position:relative;min-height:540px}
+.c3 .polaroid{position:absolute;background:var(--white);padding:10px 10px 44px;border:2.5px solid var(--ink);box-shadow:var(--sh);border-radius:6px}
+.c3 .polaroid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;border:2px solid var(--ink)}
+.c3 .polaroid figcaption{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:700 24px/1 var(--f-h)}
+.c3 .p1{width:62%;left:0;top:30px;transform:rotate(-5deg)}
+.c3 .p1 img{object-position:50% 30%}
+.c3 .p2{width:42%;right:2%;top:0;transform:rotate(6deg)}
+.c3 .tapes{position:absolute;width:90px;height:26px;background:#ff7ab8b3;border:1.5px solid var(--ink);top:-12px;left:50%;transform:translateX(-50%) rotate(-6deg)}
+.c3 .stage .card{position:absolute;right:0;bottom:0;width:min(270px,60%);transform:rotate(-3deg)}
+.c3 .stick{position:absolute;font:800 15px/1.1 var(--f-d);border:2.5px solid var(--ink);border-radius:999px;padding:10px 14px;box-shadow:3px 3px 0 var(--ink);white-space:nowrap}
+.c3 .s1{background:var(--hi);left:8%;bottom:8%;transform:rotate(-8deg)}
+.c3 .s2{background:var(--lilac);left:44%;top:-6px;transform:rotate(4deg)}
+.c3 .note{position:absolute;font:700 28px/1 var(--f-h);color:var(--ink);left:2%;bottom:30%;transform:rotate(-6deg)}
+.c3 .note svg{display:block;width:80px;height:40px;margin:2px 0 0 120px}
+@media (max-width:960px){.c3 .hero-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.c3 .stage{min-height:460px}.c3 .note{display:none}.c3 .s2{display:none}}
+
+.c3 .ticker{background:var(--ink);color:var(--white);overflow:hidden;white-space:nowrap;padding-block:14px;transform:rotate(-1.5deg);margin-inline:-20px;border-block:2.5px solid var(--ink)}
+.c3 .ticker div{display:inline-flex;gap:26px;font:800 30px/1 var(--f-d);letter-spacing:-.03em;animation:c3t 30s linear infinite}
+.c3 .ticker span{display:inline-flex;gap:26px;align-items:center}
+.c3 .ticker span:nth-child(3n+1){color:var(--hi)}.c3 .ticker span:nth-child(3n+2){color:var(--pink)}.c3 .ticker span:nth-child(3n){color:var(--sky)}
+.c3 .ticker span::after{content:"\2726";color:var(--white);font-size:22px}
+@keyframes c3t{to{transform:translateX(-50%)}}
+
+.c3 .center{text-align:center;max-width:780px;margin:0 auto}
+.c3 h2{font:800 clamp(40px,5.6vw,76px)/.95 var(--f-d);letter-spacing:-.05em}
+.c3 h2 .sq{font:700 1em/1 var(--f-h);color:var(--pink);letter-spacing:0}
+.c3 .sub{color:var(--mute);font-size:18px;line-height:1.55;margin-top:16px}
+.c3 .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:54px}
+.c3 .fstep{border-radius:28px;padding:26px;display:grid;gap:12px;align-content:start;background:var(--white)}
+.c3 .fstep:nth-child(1){background:var(--sky);transform:rotate(-1.5deg)}
+.c3 .fstep:nth-child(2){background:var(--hi);transform:rotate(1deg)}
+.c3 .fstep:nth-child(3){background:var(--lilac);transform:rotate(-1deg)}
+.c3 .fstep .n{width:52px;height:52px;border-radius:50%;background:var(--white);border:2.5px solid var(--ink);display:grid;place-items:center;font:800 26px/1 var(--f-d)}
+.c3 .fstep h3{font:800 28px/1 var(--f-d);letter-spacing:-.04em}
+.c3 .fstep p{font-size:15.5px;line-height:1.5}
+.c3 .fstep .hand{font:700 22px/1.1 var(--f-h)}
+@media (max-width:860px){.c3 .flow{grid-template-columns:1fr}}
+
+.c3 .roster{background:var(--sky);border-block:2.5px solid var(--ink)}
+.c3 .tcards{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:54px}
+.c3 .tcard{background:var(--white);border-radius:24px;padding:12px;display:flex;flex-direction:column;gap:14px}
+.c3 .tcard:nth-child(even){transform:rotate(1.2deg)}.c3 .tcard:nth-child(odd){transform:rotate(-1.2deg)}
+.c3 .tcard .shot{position:relative;border-radius:16px;overflow:hidden;border:2.5px solid var(--ink);aspect-ratio:1/1}
+.c3 .tcard .shot img{width:100%;height:100%;object-fit:cover}
+.c3 .tcard .num{color:var(--ink);position:absolute;right:8px;top:8px;background:var(--hi);border:2.5px solid var(--ink);border-radius:14px;padding:6px 10px;font:800 30px/1 var(--f-d);letter-spacing:-.04em;min-width:54px;text-align:center}
+.c3 .tcard .pos{color:var(--ink);position:absolute;left:8px;bottom:8px;background:var(--white);border:2px solid var(--ink);border-radius:999px;padding:5px 10px;font:700 12px/1 var(--f-b);letter-spacing:.08em;text-transform:uppercase}
+.c3 .tcard .inner{padding:4px 8px 10px;display:flex;flex-direction:column;gap:12px;flex:1}
+.c3 .tcard h3{font:800 30px/1 var(--f-d);letter-spacing:-.045em}
+.c3 .tcard .cap{font:700 22px/1 var(--f-h);color:#c2307a}
+.c3 .stats{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--ink);border-radius:14px;overflow:hidden}
+.c3 .stats div{padding:8px 10px;display:grid;gap:3px}
+.c3 .stats div+div{border-left:2px solid var(--ink)}
+.c3 .stats small{font:700 10px/1 var(--f-b);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.c3 .stats b{font:800 22px/1 var(--f-d);letter-spacing:-.03em}
+.c3 .tcard ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14.5px;line-height:1.4;flex:1}
+.c3 .tcard li{display:flex;gap:9px}
+.c3 .tcard li::before{content:"";flex:none;width:16px;height:16px;border-radius:5px;background:var(--hi);border:2px solid var(--ink);margin-top:1px}
+.c3 .tcard .btn{justify-content:center;font-size:15px;padding:12px 16px}
+.c3 .tcard.star{background:var(--ink);color:var(--white)}
+.c3 .tcard.star .cap{color:var(--hi)}
+.c3 .tcard.star .stats{border-color:var(--white)}.c3 .tcard.star .stats div+div{border-color:var(--white)}
+.c3 .tcard.star .stats small{color:#bdb6e6}
+.c3 .tcard.star .btn{background:var(--hi);border-color:var(--white);box-shadow:4px 4px 0 var(--pink)}
+@media (max-width:1060px){.c3 .tcards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.c3 .tcards{grid-template-columns:1fr}}
+
+.c3 .glow{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.c3 .glowup{background:var(--white);border-radius:30px;padding:24px;display:grid;gap:16px;position:relative}
+.c3 .glowup .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.c3 .glowup .box{border:2.5px solid var(--ink);border-radius:20px;padding:16px;display:grid;gap:4px}
+.c3 .glowup .box small{font:700 11px/1 var(--f-b);letter-spacing:.12em;text-transform:uppercase}
+.c3 .glowup .box b{font:800 72px/.9 var(--f-d);letter-spacing:-.05em}
+.c3 .glowup .box.then{background:var(--white)}
+.c3 .glowup .box.now{background:var(--hi)}
+.c3 .glowup .chips{display:flex;gap:8px;flex-wrap:wrap}
+.c3 .glowup .chips span{border:2px solid var(--ink);border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:700;background:var(--bg)}
+.c3 .glowup .chips span.up{background:var(--hi)}
+.c3 .glowup .burst{position:absolute;right:-18px;top:-26px;width:110px;height:110px;display:grid;place-items:center;font:800 26px/1 var(--f-d);transform:rotate(10deg)}
+.c3 .glowup .burst svg{position:absolute;inset:0;width:100%;height:100%}
+.c3 .glowup .burst span{position:relative}
+.c3 .ages{display:grid;gap:12px;margin-top:26px}
+.c3 .ages div{display:flex;justify-content:space-between;align-items:center;border:2.5px solid var(--ink);border-radius:18px;padding:12px 16px;background:var(--white);font-weight:700;gap:12px}
+.c3 .ages div b{font:800 22px/1 var(--f-d);letter-spacing:-.03em}
+.c3 .ages div:nth-child(1){background:var(--sky)}.c3 .ages div:nth-child(2){background:var(--lilac)}.c3 .ages div:nth-child(3){background:var(--pink)}
+@media (max-width:900px){.c3 .glow{grid-template-columns:1fr}.c3 .glowup .burst{right:-4px}}
+
+.c3 .final{padding-block:40px 70px}
+.c3 .finalbox{background:var(--pink);border-radius:36px;padding:clamp(34px,6vw,70px);text-align:center;position:relative;overflow:hidden}
+.c3 .finalbox h2{font-size:clamp(46px,7vw,100px)}
+.c3 .finalbox p{font-size:19px;margin:16px auto 30px;max-width:44ch}
+.c3 .finalbox .ctas{justify-content:center}
+.c3 footer{padding-block:0 30px;font-size:13.5px;color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-weight:500}
+/* ---------- Shared FASTHIT card (Power + Technique + Index note + 7 signals) ---------- */
+.c4 .card,.c5 .card,.c6 .card{background:var(--card-bg);color:var(--card-fg);border-radius:var(--card-r,22px);padding:18px;display:grid;gap:14px;font-family:var(--card-font);width:100%}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card .who{font-size:14px;font-weight:700}
+.card .who small{display:block;font-weight:500;opacity:.65;font-size:11.5px;margin-top:3px}
+.card .ver{font:500 9.5px/1 "Geist Mono",monospace;opacity:.55;letter-spacing:.06em;white-space:nowrap}
+.card .scores{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card .s{background:var(--row-bg);border-radius:var(--s-r,14px);padding:10px 12px;display:grid;gap:6px}
+.card .s span{font:600 10px/1 "Geist Mono",monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.card .s b{font:var(--num-font);line-height:.9;letter-spacing:-.02em}
+.card .s i{display:block;height:5px;border-radius:9px;background:var(--track);position:relative;overflow:hidden}
+.card .s i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--bar);border-radius:9px}
+.card .note{font-size:12.5px;line-height:1.45;padding:10px 12px;border-radius:12px;background:var(--note-bg);color:var(--note-fg)}
+.card .note b{display:block;font:600 9.5px/1 "Geist Mono",monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;opacity:.75}
+.c4 .chips,.c5 .chips,.c6 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.c4 .chips span,.c5 .chips span,.c6 .chips span{font-size:11.5px;font-weight:600;padding:6px 9px;border-radius:999px;display:inline-flex;gap:6px;align-items:center;background:var(--chip-bg)}
+.c4 .chips span::before,.c5 .chips span::before,.c6 .chips span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--e)}
+.c4 .chips span.m::before,.c5 .chips span.m::before,.c6 .chips span.m::before{background:var(--m)}
+.c4 .chips span.r::before,.c5 .chips span.r::before,.c6 .chips span.r::before{background:var(--r)}
+.c4 .legend,.c5 .legend,.c6 .legend{display:flex;gap:14px;flex-wrap:wrap;font:600 11px/1 "Geist Mono",monospace;letter-spacing:.04em}
+.c4 .legend span,.c5 .legend span,.c6 .legend span{display:inline-flex;gap:7px;align-items:center}
+.c4 .legend i,.c5 .legend i,.c6 .legend i{width:9px;height:9px;border-radius:50%}
+
+/* =========================================================
+   04 — CHALKLINE  (infield clay, white chalk lines, deep grass green)
+   ========================================================= */
+.c4{
+  --clay:#d4582f; --clay-2:#b9461f; --chalk:#ffffff; --grass:#0f3a2c; --grass-2:#165040; --sun:#ffd447; --ink:#1d120c; --dirt:#f2e6dc; --mute:#6b5649;
+  --f-d:Archivo,"Arial Black",sans-serif; --f-b:Archivo,system-ui,sans-serif;
+  --card-bg:#ffffff; --card-fg:#1d120c; --card-font:Archivo,sans-serif; --card-r:6px; --s-r:4px; --num-font:900 44px/1 Archivo,sans-serif;
+  --row-bg:#f6efe9; --track:#ead9cc; --bar:#d4582f; --note-bg:#0f3a2c; --note-fg:#fff; --chip-bg:#f6efe9; --e:#1f9d61; --m:#e7a21a; --r:#d4382f;
+  background:var(--dirt);color:var(--ink);font-family:var(--f-b)
+}
+.c4 .disp{font-family:var(--f-d);font-variation-settings:"wdth" 125;font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
+.c4 .cond{font-family:var(--f-d);font-variation-settings:"wdth" 68;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.c4 .topband{background:var(--clay);color:var(--chalk)}
+.c4 nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:20px}
+.c4 .logo{font-size:24px;display:flex;align-items:center;gap:10px}
+.c4 .logo svg{width:26px;height:26px}
+.c4 .links{display:flex;gap:24px;font-size:15px;font-weight:600}
+.c4 .links a{text-decoration:none}
+.c4 .btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-d);font-variation-settings:"wdth" 100;font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border-radius:4px;background:var(--grass);color:#fff;border:2px solid var(--grass)}
+.c4 .btn.chalk{background:transparent;color:var(--chalk);border-color:var(--chalk)}
+.c4 .btn.sun{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+@media (max-width:860px){.c4 .links{display:none}}
+.c4 .hero{padding-block:30px 0}
+.c4 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:end}
+.c4 .tag{display:inline-flex;gap:10px;align-items:center;border:2px solid var(--chalk);padding:7px 12px;font-size:13px;letter-spacing:.14em}
+.c4 h1{font-size:clamp(44px,7vw,100px);line-height:.88;margin-top:22px}
+.c4 h1 span{color:var(--sun)}
+.c4 .lede{font-size:18px;line-height:1.55;max-width:48ch;margin-top:24px;color:#fff3ec}
+.c4 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.c4 .facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:40px;border-top:2px solid #ffffff66}
+.c4 .facts div{padding:16px 14px 26px 0;font-size:14px;line-height:1.35;color:#ffe9de}
+.c4 .facts b{display:block;color:#fff;font-size:16px;margin-bottom:4px}
+.c4 .box{position:relative;padding:22px;border:3px solid var(--chalk);border-bottom:0;margin-bottom:0}
+.c4 .box::before{content:"BATTER'S BOX";position:absolute;top:-11px;left:16px;background:var(--clay);padding:0 8px;font:800 11px/22px var(--f-d);font-variation-settings:"wdth" 68;letter-spacing:.2em}
+.c4 .shot{position:relative;aspect-ratio:1152/864;overflow:hidden}
+.c4 .shot img{width:100%;height:100%;object-fit:cover}
+.c4 .shot svg{position:absolute;inset:0;width:100%;height:100%}
+.c4 .skel{stroke:#fff;stroke-width:7;stroke-linecap:round;fill:none;stroke-dasharray:2 14}
+.c4 .skel2{stroke:#ffffffcc;stroke-width:3;fill:none}
+.c4 .jt{fill:var(--sun);stroke:var(--ink);stroke-width:3}
+.c4 .heroCard{position:relative;margin:-48px 0 0 auto;width:min(290px,88%);z-index:2;box-shadow:0 30px 60px -20px #1d120c88}
+@media (max-width:940px){.c4 .hero-grid{grid-template-columns:1fr}.c4 .heroCard{margin-top:-60px}}
+@media (max-width:520px){.c4 .facts{grid-template-columns:1fr}.c4 .facts div{padding:12px 0;border-bottom:1px solid #ffffff44}}
+
+.c4 .strip{background:var(--grass);color:#fff}
+.c4 .strip .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.c4 .strip div{padding:20px 18px;border-left:2px dashed #ffffff40;font-size:15px;font-weight:600;line-height:1.35}
+.c4 .strip div:first-child{border-left:0;padding-left:0}
+.c4 .strip s{text-decoration-color:var(--sun);text-decoration-thickness:3px}
+@media (max-width:820px){.c4 .strip .wrap{grid-template-columns:1fr 1fr}.c4 .strip div:nth-child(3){border-left:0;padding-left:0}}
+
+.c4 .eyebrow{font-size:14px;letter-spacing:.18em;color:var(--clay);display:flex;gap:10px;align-items:center}
+.c4 .eyebrow::before{content:"";width:26px;height:3px;background:currentColor}
+.c4 h2{font-size:clamp(36px,5.4vw,72px);line-height:.9;margin-top:16px}
+.c4 .sub{font-size:18px;line-height:1.55;color:var(--mute);max-width:52ch;margin-top:18px}
+
+/* lineup card */
+.c4 .lineup{margin-top:46px;background:#fff;border:3px solid var(--ink);border-radius:4px;overflow:hidden}
+.c4 .lu-head,.c4 .lu-row{display:grid;grid-template-columns:70px 1.2fr 1fr 2fr 190px;align-items:center}
+.c4 .lu-head{background:var(--ink);color:#fff;font:800 12px/1 var(--f-d);font-variation-settings:"wdth" 68;letter-spacing:.18em;text-transform:uppercase}
+.c4 .lu-head div{padding:14px 16px}
+.c4 .lu-row{border-top:2px solid var(--ink)}
+.c4 .lu-row>div{padding:18px 16px;min-width:0}
+.c4 .lu-row>div+div{border-left:1px solid #e3d3c6}
+.c4 .lu-row .no{font:900 34px/1 var(--f-d);font-variation-settings:"wdth" 125;color:var(--clay);text-align:center}
+.c4 .lu-row .pf{display:flex;gap:12px;align-items:center}
+.c4 .lu-row .pf img{width:54px;height:54px;object-fit:cover;border-radius:4px;flex:none}
+.c4 .lu-row .pf b{font:900 20px/1 var(--f-d);font-variation-settings:"wdth" 110;text-transform:uppercase}
+.c4 .lu-row .cap{font:900 30px/1 var(--f-d);font-variation-settings:"wdth" 125}
+.c4 .lu-row .cap small{display:block;font:600 12px/1.3 var(--f-b);font-variation-settings:"wdth" 100;color:var(--mute);margin-top:4px;letter-spacing:0;text-transform:none}
+.c4 .lu-row .what{font-size:14.5px;line-height:1.5;color:var(--mute)}
+.c4 .lu-row .btn{width:100%;justify-content:center;font-size:13px;padding:12px}
+.c4 .lu-row.hl{background:var(--sun)}
+.c4 .lu-row.hl>div+div{border-left-color:#e2b92a}
+.c4 .lu-row.hl .what,.c4 .lu-row.hl .cap small{color:#4a3a10}
+@media (max-width:960px){
+  .c4 .lu-head{display:none}
+  .c4 .lu-row{grid-template-columns:60px 1fr;grid-template-areas:"no pf" "no cap" "no what" "no go"}
+  .c4 .lu-row>div+div{border-left:0}
+  .c4 .lu-row .no{grid-area:no;align-self:stretch;display:grid;place-items:start center;padding-top:22px;border-right:1px solid #e3d3c6}
+  .c4 .lu-row .pf{grid-area:pf;padding-bottom:6px}.c4 .lu-row .cap{grid-area:cap;padding-block:6px}.c4 .lu-row .what{grid-area:what;padding-block:6px}.c4 .lu-row .go{grid-area:go}
+}
+
+.c4 .what{background:#fff}
+.c4 .what-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:46px}
+.c4 .meter{border:3px solid var(--ink);border-radius:4px;padding:26px;display:grid;gap:14px;align-content:start}
+.c4 .meter .lbl{font-size:15px;letter-spacing:.16em;color:var(--clay)}
+.c4 .meter h3{font-size:clamp(40px,5vw,64px);line-height:.9}
+.c4 .meter p{font-size:16px;line-height:1.55;color:var(--mute)}
+.c4 .scale{position:relative;height:46px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 10%);border-bottom:3px solid var(--ink)}
+.c4 .scale .zone{position:absolute;left:70%;right:0;bottom:0;height:22px;background:#1f9d6155;border-left:3px solid #1f9d61}
+.c4 .scale .pin{position:absolute;bottom:-3px;width:3px;height:46px;background:var(--clay)}
+.c4 .scale .pin span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font:900 18px/1 var(--f-d);font-variation-settings:"wdth" 100;color:var(--clay)}
+.c4 .scale-l{display:flex;justify-content:space-between;font:700 12px/1 var(--f-b);color:var(--mute)}
+.c4 .sigs{grid-column:1/-1;display:grid;grid-template-columns:repeat(7,1fr);gap:0;border:3px solid var(--ink);border-radius:4px;overflow:hidden}
+.c4 .sigs div{padding:18px 14px;display:grid;gap:10px;border-left:2px solid var(--ink);align-content:start}
+.c4 .sigs div:first-child{border-left:0}
+.c4 .sigs b{font:900 17px/1.05 var(--f-d);font-variation-settings:"wdth" 90;text-transform:uppercase}
+.c4 .sigs i{height:10px;border-radius:2px}
+.c4 .sigs small{font-size:12.5px;font-weight:700}
+.c4 .sig-head{grid-column:1/-1;display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.c4 .sig-head h3{font-size:30px}
+@media (max-width:980px){.c4 .what-grid{grid-template-columns:1fr}.c4 .sigs{grid-template-columns:repeat(4,1fr)}.c4 .sigs div:nth-child(5){border-left:0}.c4 .sigs div:nth-child(n+5){border-top:2px solid var(--ink)}}
+@media (max-width:520px){.c4 .sigs{grid-template-columns:1fr 1fr}.c4 .sigs div{border-left:0!important;border-top:2px solid var(--ink)}.c4 .sigs div:nth-child(odd){border-right:2px solid var(--ink)}.c4 .sigs div:nth-child(-n+2){border-top:0}}
+
+/* diamond week */
+.c4 .week{background:var(--grass);color:#fff}
+.c4 .week .eyebrow{color:var(--sun)}
+.c4 .week .sub{color:#c8ddd4}
+.c4 .diamond-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center;margin-top:30px}
+.c4 .diamond{position:relative;aspect-ratio:1;max-width:520px;width:100%;justify-self:center}
+.c4 .diamond svg{position:absolute;inset:0;width:100%;height:100%}
+.c4 .base{position:absolute;transform:translate(-50%,-50%);width:min(170px,34%);text-align:center;display:grid;gap:6px;justify-items:center}
+.c4 .base .n{width:44px;height:44px;background:#fff;color:var(--grass);transform:rotate(45deg);display:grid;place-items:center;border-radius:4px}
+.c4 .base .n span{transform:rotate(-45deg);font:900 20px/1 var(--f-d)}
+.c4 .base b{font:900 15px/1.05 var(--f-d);font-variation-settings:"wdth" 90;text-transform:uppercase}
+.c4 .base.home .n{background:var(--sun)}
+.c4 .steps{display:grid;gap:0;counter-reset:s}
+.c4 .steps div{display:grid;grid-template-columns:46px 1fr;gap:14px;padding:16px 0;border-top:2px dashed #ffffff33}
+.c4 .steps div:last-child{border-bottom:2px dashed #ffffff33}
+.c4 .steps .k{font:900 26px/1 var(--f-d);color:var(--sun)}
+.c4 .steps b{display:block;font:900 18px/1.1 var(--f-d);font-variation-settings:"wdth" 100;text-transform:uppercase;margin-bottom:5px}
+.c4 .steps p{font-size:15px;line-height:1.5;color:#c8ddd4}
+.c4 .calm{margin-top:20px;font-size:14.5px;line-height:1.55;color:#c8ddd4;border-left:3px solid var(--sun);padding-left:14px}
+@media (max-width:940px){.c4 .diamond-wrap{grid-template-columns:1fr}}
+@media (max-width:520px){.c4 .base b{font-size:12px}.c4 .base .n{width:34px;height:34px}}
+
+.c4 .prog-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.c4 .sb{background:#fff;border:3px solid var(--ink);border-radius:4px;overflow:hidden}
+.c4 .sb table{width:100%;border-collapse:collapse;font-size:15px}
+.c4 .sb th{background:var(--ink);color:#fff;font:800 12px/1 var(--f-d);font-variation-settings:"wdth" 68;letter-spacing:.16em;text-transform:uppercase;padding:14px;text-align:left}
+.c4 .sb td{padding:16px 14px;border-top:2px solid #ead9cc;font-weight:600}
+.c4 .sb td.big{font:900 40px/1 var(--f-d);font-variation-settings:"wdth" 110}
+.c4 .sb td.d{color:#1f9d61;font:900 22px/1 var(--f-d)}
+.c4 .sb .foot{padding:16px;background:var(--sun);font-weight:700;font-size:15px}
+.c4 .quote{font:900 clamp(22px,2.4vw,30px)/1.1 var(--f-d);font-variation-settings:"wdth" 100;text-transform:uppercase;margin-top:24px;color:var(--grass)}
+@media (max-width:940px){.c4 .prog-grid{grid-template-columns:1fr}}
+
+.c4 .final{background:var(--clay);color:#fff;text-align:center;position:relative;overflow:hidden}
+.c4 .final .lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.c4 .final .wrap{position:relative}
+.c4 .final h2{font-size:clamp(46px,8vw,120px)}
+.c4 .final h2 span{color:var(--sun)}
+.c4 .final p{font-size:18px;line-height:1.55;max-width:52ch;margin:20px auto 30px;color:#ffe9de}
+.c4 .limit{max-width:760px;margin:40px auto 0;font-size:14px;line-height:1.6;color:#ffe2d4;border-top:2px dashed #ffffff55;padding-top:22px}
+.c4 .limit b{display:block;color:#fff;letter-spacing:.16em;font-size:12px;margin-bottom:6px}
+.c4 footer{background:var(--ink);color:#c9b8ad;font-size:13px}
+.c4 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px}
+
+/* =========================================================
+   05 — AURA  (soft daylight haze: peach, aqua, lime mist, frosted glass)
+   ========================================================= */
+.c5{
+  --bg:#f3f6f8; --ink:#13203a; --mute:#56627a; --peach:#ffb48f; --aqua:#7fe1d6; --lime:#dcf5a2; --sky:#b5d4ff; --tang:#ff6a2b; --glass:rgba(255,255,255,.62); --edge:rgba(255,255,255,.9);
+  --f-d:Syne,"Trebuchet MS",sans-serif; --f-b:"Inter Tight",system-ui,sans-serif;
+  --card-bg:rgba(255,255,255,.78); --card-fg:#13203a; --card-font:"Inter Tight",sans-serif; --card-r:28px; --s-r:18px; --num-font:800 44px/1 Syne,sans-serif;
+  --row-bg:rgba(255,255,255,.85); --track:#e3e9f0; --bar:linear-gradient(90deg,#7fe1d6,#ffb48f); --note-bg:linear-gradient(120deg,#dcf5a2,#bff0e9); --note-fg:#13203a; --chip-bg:rgba(255,255,255,.9); --e:#17b38a; --m:#f0a400; --r:#ff5a3c;
+  background:var(--bg);color:var(--ink);font-family:var(--f-b);position:relative;isolation:isolate
+}
+.c5 .haze{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.c5 .haze i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;animation:c5f 18s ease-in-out infinite alternate}
+.c5 .haze i:nth-child(1){width:520px;height:520px;background:var(--peach);top:-120px;right:-80px}
+.c5 .haze i:nth-child(2){width:460px;height:460px;background:var(--aqua);top:260px;left:-160px;animation-delay:-6s}
+.c5 .haze i:nth-child(3){width:420px;height:420px;background:var(--lime);top:1500px;right:-120px;animation-delay:-3s}
+.c5 .haze i:nth-child(4){width:520px;height:520px;background:var(--sky);top:2700px;left:-180px;animation-delay:-9s}
+.c5 .haze i:nth-child(5){width:480px;height:480px;background:var(--peach);top:4100px;right:-160px;animation-delay:-12s}
+@keyframes c5f{to{transform:translate(40px,60px) scale(1.08)}}
+.c5 .glass{background:var(--glass);border:1px solid var(--edge);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);box-shadow:0 20px 50px -30px #13203a55}
+.c5 nav{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:16px;padding:10px 10px 10px 20px;border-radius:999px}
+.c5 .logo{font:800 20px/1 var(--f-d);letter-spacing:-.02em;display:flex;gap:8px;align-items:center}
+.c5 .logo i{width:22px;height:22px;border-radius:50%;background:conic-gradient(from 200deg,var(--aqua),var(--peach),var(--lime),var(--aqua))}
+.c5 .links{display:flex;gap:6px}
+.c5 .links a{text-decoration:none;font-size:14.5px;font-weight:600;padding:9px 14px;border-radius:999px;color:var(--mute)}
+.c5 .btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:600 15.5px/1 var(--f-b);padding:15px 22px;border-radius:999px;background:var(--ink);color:#fff}
+.c5 .btn.t{background:var(--tang)}
+.c5 .btn.g{background:rgba(255,255,255,.7);color:var(--ink);border:1px solid var(--edge)}
+.c5 .btn.sm{padding:12px 18px;font-size:14px}
+@media (max-width:860px){.c5 .links{display:none}}
+.c5 .hero{padding-block:56px 70px}
+.c5 .hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.c5 .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--mute)}
+.c5 .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--tang);box-shadow:0 0 0 4px #ff6a2b33}
+.c5 h1{font:800 clamp(46px,6.6vw,92px)/.95 var(--f-d);letter-spacing:-.045em;margin-top:22px}
+.c5 h1 em{font-style:normal;background:linear-gradient(100deg,#ff6a2b,#ff9f6b 40%,#2cc4b0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.c5 .lede{font-size:18.5px;line-height:1.6;color:var(--mute);max-width:46ch;margin-top:24px}
+.c5 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.c5 .facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.c5 .facts span{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.3;color:var(--mute)}
+.c5 .facts b{color:var(--ink);display:block}
+.c5 .stage{position:relative;min-height:600px}
+.c5 .arch{position:absolute;overflow:hidden;border-radius:999px 999px 36px 36px;border:6px solid rgba(255,255,255,.85);box-shadow:0 30px 60px -30px #13203a66}
+.c5 .arch img{width:100%;height:100%;object-fit:cover}
+.c5 .a1{width:58%;height:470px;left:0;top:0}
+.c5 .a1 img{object-position:48% 50%}
+.c5 .a2{width:40%;height:260px;right:0;top:40px;border-radius:36px 36px 999px 999px}
+.c5 .stage .card{position:absolute;right:0;bottom:0;width:min(320px,74%)}
+.c5 .float{position:absolute;left:4%;bottom:70px;padding:12px 16px;border-radius:20px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:center}
+.c5 .float b{font:800 24px/1 var(--f-d);color:var(--tang)}
+@media (max-width:960px){.c5 .hero-grid{grid-template-columns:1fr}.c5 .stage{min-height:620px}}
+@media (max-width:520px){.c5 .stage{min-height:560px}.c5 .a1{height:340px;width:70%}.c5 .a2{height:180px;width:42%}.c5 .float{display:none}}
+
+.c5 .marq{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.c5 .marq span{padding:12px 18px;border-radius:999px;font-weight:600;font-size:15px}
+.c5 .marq s{text-decoration-color:var(--tang);text-decoration-thickness:2px;color:var(--mute)}
+.c5 .center{text-align:center;max-width:760px;margin:0 auto}
+.c5 .kick{font:700 13px/1 var(--f-b);letter-spacing:.16em;text-transform:uppercase;color:var(--tang)}
+.c5 h2{font:800 clamp(38px,5vw,68px)/1 var(--f-d);letter-spacing:-.045em;margin-top:14px}
+.c5 .sub{font-size:18px;line-height:1.6;color:var(--mute);margin-top:16px}
+
+.c5 .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:50px}
+.c5 .tile{border-radius:30px;padding:26px;display:grid;gap:12px;align-content:start;min-width:0}
+.c5 .tile h3{font:800 26px/1.05 var(--f-d);letter-spacing:-.03em}
+.c5 .tile p{font-size:15.5px;line-height:1.55;color:var(--mute)}
+.c5 .t-pw{grid-column:span 3}.c5 .t-te{grid-column:span 3}.c5 .t-sg{grid-column:span 4}.c5 .t-nt{grid-column:span 2}.c5 .t-ag{grid-column:span 2}.c5 .t-vd{grid-column:span 2}.c5 .t-sm{grid-column:span 2}
+.c5 .ring{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c1),var(--c2) var(--p),#e3e9f0 0);position:relative}
+.c5 .ring::before{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}
+.c5 .ring b{position:relative;font:800 36px/1 var(--f-d);letter-spacing:-.03em}
+.c5 .tile .row{display:flex;gap:20px;align-items:center}
+.c5 .zone{display:inline-flex;padding:7px 12px;border-radius:999px;background:var(--lime);font-weight:700;font-size:13px}
+.c5 .t-sg .chips span{font-size:13.5px;padding:9px 13px}
+.c5 .t-nt{background:linear-gradient(140deg,rgba(220,245,162,.9),rgba(127,225,214,.7))}
+.c5 .t-nt q{font:700 19px/1.35 var(--f-b);quotes:"\201C" "\201D"}
+.c5 .ages{display:grid;gap:8px}
+.c5 .ages div{display:flex;justify-content:space-between;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.85);font-weight:600;font-size:14px}
+.c5 .ages b{font-family:var(--f-d)}
+.c5 .mini{border-radius:20px;overflow:hidden;aspect-ratio:16/10;position:relative}
+.c5 .mini img{width:100%;height:100%;object-fit:cover}
+.c5 .mini svg{position:absolute;inset:0;width:100%;height:100%}
+@media (max-width:980px){.c5 .bento{grid-template-columns:1fr 1fr}.c5 .tile{grid-column:span 1!important}.c5 .t-sg{grid-column:1/-1!important}}
+@media (max-width:600px){.c5 .bento{grid-template-columns:1fr}.c5 .t-sg{grid-column:auto!important}}
+
+.c5 .people{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:50px}
+.c5 .pp{border-radius:32px;padding:12px;display:flex;flex-direction:column;gap:16px}
+.c5 .pp .ph{border-radius:999px 999px 22px 22px;overflow:hidden;aspect-ratio:4/4.4;position:relative}
+.c5 .pp .ph img{width:100%;height:100%;object-fit:cover}
+.c5 .pp .cnt{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(255,255,255,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:8px 14px;font:800 15px/1 var(--f-d);white-space:nowrap}
+.c5 .pp .in{padding:4px 10px 12px;display:flex;flex-direction:column;gap:12px;flex:1}
+.c5 .pp h3{font:800 24px/1 var(--f-d);letter-spacing:-.03em}
+.c5 .pp p{font-size:14.5px;line-height:1.55;color:var(--mute);flex:1}
+.c5 .pp .btn{justify-content:center}
+.c5 .pp.hl{background:linear-gradient(160deg,rgba(255,180,143,.75),rgba(255,255,255,.6))}
+@media (max-width:1040px){.c5 .people{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.c5 .people{grid-template-columns:1fr}}
+
+.c5 .prog{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.c5 .vs{border-radius:34px;padding:26px;display:grid;gap:18px}
+.c5 .vs .pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.c5 .vs .side{border-radius:24px;padding:18px;display:grid;gap:14px;justify-items:center;text-align:center;background:rgba(255,255,255,.75)}
+.c5 .vs .side small{font:600 11px/1 "Geist Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.c5 .vs .side .ring{width:104px;height:104px}
+.c5 .vs .side .tq{font-size:13.5px;font-weight:600}
+.c5 .vs .msg{display:flex;gap:8px;flex-wrap:wrap}
+.c5 .vs .msg span{padding:9px 13px;border-radius:999px;font-weight:600;font-size:13.5px;background:rgba(255,255,255,.85)}
+.c5 .vs .msg span.up{background:var(--lime)}
+@media (max-width:940px){.c5 .prog{grid-template-columns:1fr}}
+
+.c5 .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:46px;position:relative}
+.c5 .flow::before{content:"";position:absolute;left:8%;right:8%;top:32px;height:3px;background:linear-gradient(90deg,var(--aqua),var(--peach),var(--lime));border-radius:3px}
+.c5 .fs{display:grid;gap:12px;justify-items:center;text-align:center;position:relative}
+.c5 .fs .dot{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font:800 22px/1 var(--f-d);background:#fff;border:1px solid var(--edge);box-shadow:0 10px 30px -14px #13203a66}
+.c5 .fs b{font:800 18px/1.1 var(--f-d)}
+.c5 .fs p{font-size:14px;line-height:1.5;color:var(--mute)}
+@media (max-width:900px){.c5 .flow{grid-template-columns:1fr;gap:20px}.c5 .flow::before{left:31px;right:auto;top:10px;bottom:10px;width:3px;height:auto}.c5 .fs{grid-template-columns:64px 1fr;justify-items:start;text-align:left;column-gap:16px}.c5 .fs .dot{grid-row:span 2}}
+
+.c5 .final .box{border-radius:44px;padding:clamp(34px,6vw,76px);text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,180,143,.85),rgba(127,225,214,.75) 60%,rgba(220,245,162,.85))}
+.c5 .final h2{font-size:clamp(42px,6.4vw,90px)}
+.c5 .final p{font-size:18px;line-height:1.6;max-width:50ch;margin:18px auto 28px}
+.c5 .final .ctas{justify-content:center}
+.c5 .final .limit{max-width:720px;margin:34px auto 0;font-size:14px;line-height:1.6;padding:18px 22px;border-radius:22px;background:rgba(255,255,255,.6);text-align:left}
+.c5 .final .limit b{display:block;font-family:var(--f-d);font-size:16px;margin-bottom:4px}
+.c5 footer{padding-block:10px 34px;font-size:13.5px;color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* =========================================================
+   06 — CUTOUT  (campaign poster: electric cobalt duotone, serif italics, signal red)
+   ========================================================= */
+.c6{
+  --cobalt:#2a37ff; --cobalt-d:#1620c9; --paper:#ffffff; --fog:#eef0f8; --ink:#0b0c1a; --red:#ff3b2f; --mute:#5c6080;
+  --f-s:"Instrument Serif",Georgia,serif; --f-b:Geist,system-ui,sans-serif; --f-m:"Geist Mono",ui-monospace,monospace;
+  --card-bg:#ffffff; --card-fg:#0b0c1a; --card-font:Geist,sans-serif; --card-r:4px; --s-r:2px; --num-font:400 54px/1 "Instrument Serif",serif;
+  --row-bg:#eef0f8; --track:#d9dcef; --bar:#2a37ff; --note-bg:#2a37ff; --note-fg:#fff; --chip-bg:#eef0f8; --e:#14a35b; --m:#f2a900; --r:#ff3b2f;
+  background:var(--paper);color:var(--ink);font-family:var(--f-b)
+}
+.c6 .duo{background:var(--cobalt);position:relative;overflow:hidden}
+.c6 .duo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.35) brightness(1.15);mix-blend-mode:screen}
+.c6 .duo::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,#1620c966);pointer-events:none}
+.c6 .head{background:var(--cobalt);color:#fff}
+.c6 nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:18px;border-bottom:1px solid #ffffff40}
+.c6 .logo{font:800 19px/1 var(--f-b);letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.c6 .logo i{font:italic 400 26px/1 var(--f-s);letter-spacing:0;color:#fff;background:var(--red);width:30px;height:30px;display:grid;place-items:center;border-radius:50%}
+.c6 .links{display:flex;gap:26px;font:500 14px/1 var(--f-b)}
+.c6 .links a{text-decoration:none;opacity:.85}
+.c6 .btn{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font:600 15px/1 var(--f-b);padding:16px 22px;background:var(--ink);color:#fff;border-radius:0}
+.c6 .btn::after{content:"\2192"}
+.c6 .btn.w{background:#fff;color:var(--ink)}
+.c6 .btn.r{background:var(--red);color:#fff}
+.c6 .btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.c6 .btn.sm{padding:12px 16px;font-size:14px}
+@media (max-width:860px){.c6 .links{display:none}}
+.c6 .hero{padding-block:0}
+.c6 .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;align-items:stretch;min-height:620px}
+.c6 .hero-l{padding-block:56px 60px;padding-right:40px;display:flex;flex-direction:column;justify-content:space-between;gap:30px}
+.c6 .meta{font:500 12px/1.4 var(--f-m);letter-spacing:.08em;text-transform:uppercase;display:flex;gap:18px;flex-wrap:wrap;opacity:.9}
+.c6 h1{font:400 clamp(58px,8.6vw,128px)/.86 var(--f-s);letter-spacing:-.025em}
+.c6 h1 i{font-style:italic}
+.c6 h1 .u{position:relative;display:inline-block}
+.c6 h1 .u::after{content:"";position:absolute;left:2%;right:2%;bottom:.04em;height:.07em;background:var(--red)}
+.c6 .lede{font-size:18px;line-height:1.55;max-width:46ch;opacity:.92}
+.c6 .ctas{display:flex;gap:10px;flex-wrap:wrap}
+.c6 .hero-r{position:relative;margin-right:calc(-1 * max(20px,env(safe-area-inset-right,0px)))}
+.c6 .hero-r .duo{position:absolute;inset:0;background:var(--cobalt-d)}
+.c6 .hero-r .duo img{object-position:45% 50%}
+.c6 .hero-r .card{position:absolute;left:24px;bottom:32px;width:min(320px,80%);z-index:2;box-shadow:0 30px 60px -20px #0b0c1a88}
+.c6 .bignum{position:absolute;right:20px;top:10px;z-index:2;font:italic 400 clamp(120px,16vw,230px)/.8 var(--f-s);color:transparent;-webkit-text-stroke:1.5px #fff}
+@media (max-width:960px){.c6 .hero-grid{grid-template-columns:1fr;min-height:0}.c6 .hero-l{padding-right:0}.c6 .hero-r{height:560px;margin-left:calc(-1 * max(20px,env(safe-area-inset-left,0px)))}.c6 .hero-r .card{left:20px;bottom:20px}}
+
+.c6 .facts{background:var(--ink);color:#fff}
+.c6 .facts .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.c6 .facts div{padding:22px 20px 22px 0;display:flex;gap:14px;align-items:baseline;border-right:1px solid #ffffff22;font-size:14.5px;color:#babdd6;line-height:1.4}
+.c6 .facts div+div{padding-left:20px}
+.c6 .facts div:last-child{border-right:0}
+.c6 .facts b{color:#fff;font:italic 400 28px/1 var(--f-s);white-space:nowrap}
+@media (max-width:760px){.c6 .facts .wrap{grid-template-columns:1fr}.c6 .facts div{border-right:0;border-bottom:1px solid #ffffff22;padding-left:0!important}}
+
+.c6 .kick{font:500 12px/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);display:flex;gap:12px;align-items:center}
+.c6 .kick::before{content:"";width:10px;height:10px;background:var(--red);border-radius:50%}
+.c6 h2{font:400 clamp(44px,6vw,88px)/.92 var(--f-s);letter-spacing:-.02em;margin-top:16px}
+.c6 h2 i{color:var(--cobalt)}
+.c6 .sub{font-size:18px;line-height:1.6;color:var(--mute);max-width:52ch;margin-top:18px}
+
+.c6 .roster{margin-top:50px;border-top:2px solid var(--ink)}
+.c6 .ro{display:grid;grid-template-columns:220px 1fr 1.3fr 210px;gap:30px;align-items:center;padding-block:26px;border-bottom:1px solid #d9dcef;position:relative}
+.c6 .ro .n{font:italic 400 clamp(84px,10vw,140px)/.8 var(--f-s);color:var(--cobalt);letter-spacing:-.03em}
+.c6 .ro .n small{display:block;font:500 11px/1.3 var(--f-m);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-top:10px}
+.c6 .ro .id{display:flex;gap:18px;align-items:center}
+.c6 .ro .id .duo{width:84px;height:84px;flex:none}
+.c6 .ro h3{font:700 26px/1.05 var(--f-b);letter-spacing:-.02em}
+.c6 .ro h3 span{display:block;font:500 12px/1.3 var(--f-m);letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-top:6px}
+.c6 .ro p{font-size:15.5px;line-height:1.55;color:var(--mute)}
+.c6 .ro .btn{justify-content:space-between;width:100%}
+.c6 .ro.hl{background:var(--fog);margin-inline:-20px;padding-inline:20px}
+@media (max-width:1000px){.c6 .ro{grid-template-columns:120px 1fr;gap:16px 24px}.c6 .ro .n{grid-row:span 3;font-size:84px}.c6 .ro p,.c6 .ro .go{grid-column:2}}
+@media (max-width:560px){.c6 .ro{grid-template-columns:1fr}.c6 .ro .n{grid-row:auto}.c6 .ro p,.c6 .ro .go{grid-column:1}}
+
+.c6 .reads{background:var(--fog)}
+.c6 .reads-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:50px;background:var(--ink);border:2px solid var(--ink)}
+.c6 .rd{background:#fff;padding:30px;display:grid;gap:14px;align-content:start}
+.c6 .rd .num{font:italic 400 96px/.8 var(--f-s);color:var(--cobalt)}
+.c6 .rd h3{font:700 24px/1.1 var(--f-b);letter-spacing:-.02em}
+.c6 .rd p{font-size:15.5px;line-height:1.55;color:var(--mute)}
+.c6 .rd .bar{height:10px;background:#d9dcef;position:relative}
+.c6 .rd .bar i{position:absolute;inset:0 auto 0 0;background:var(--cobalt)}
+.c6 .rd .bar em{position:absolute;left:70%;right:0;top:-6px;bottom:-6px;border:2px solid var(--red);border-radius:0}
+.c6 .rd .bl{display:flex;justify-content:space-between;font:500 11px/1 var(--f-m);color:var(--mute)}
+.c6 .rd.wide{grid-column:1/-1;display:grid;grid-template-columns:1fr 2fr;gap:30px;align-items:center}
+.c6 .sig7{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.c6 .sig7 div{border-top:4px solid var(--e);padding-top:10px;font:600 13.5px/1.25 var(--f-b)}
+.c6 .sig7 div.m{border-color:var(--m)}.c6 .sig7 div.r{border-color:var(--r)}
+.c6 .sig7 small{display:block;font:500 10.5px/1.3 var(--f-m);color:var(--mute);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.c6 .rd .duo{aspect-ratio:16/10}
+@media (max-width:900px){.c6 .reads-grid{grid-template-columns:1fr}.c6 .rd.wide{grid-template-columns:1fr}.c6 .sig7{grid-template-columns:repeat(4,1fr);row-gap:16px}}
+@media (max-width:480px){.c6 .sig7{grid-template-columns:repeat(2,1fr)}}
+
+.c6 .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:46px;border:2px solid var(--ink)}
+.c6 .vs .side{padding:28px;display:grid;gap:12px}
+.c6 .vs .side+.side{border-left:2px solid var(--ink);background:var(--cobalt);color:#fff}
+.c6 .vs small{font:500 12px/1 var(--f-m);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.c6 .vs .nums{display:flex;gap:30px;align-items:baseline;flex-wrap:wrap}
+.c6 .vs .nums div{display:grid;gap:6px}
+.c6 .vs .nums b{font:400 92px/.8 var(--f-s)}
+.c6 .vs .nums span{font:500 11px/1 var(--f-m);letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.c6 .vs .tag{display:inline-block;padding:6px 10px;font:600 12px/1 var(--f-m);letter-spacing:.06em;text-transform:uppercase;background:var(--red);color:#fff;justify-self:start}
+.c6 .vs .tag.g{background:#fff;color:var(--cobalt)}
+.c6 .vs .tag.o{background:var(--fog);color:var(--ink)}
+.c6 .pq{font:italic 400 clamp(28px,3.4vw,46px)/1.1 var(--f-s);margin-top:34px;max-width:28ch}
+@media (max-width:720px){.c6 .vs{grid-template-columns:1fr}.c6 .vs .side+.side{border-left:0;border-top:2px solid var(--ink)}}
+
+.c6 .diff{background:var(--ink);color:#fff}
+.c6 .diff .kick{color:#9aa2ff}
+.c6 .diff h2 i{color:#9aa2ff}
+.c6 .dt{margin-top:46px}
+.c6 .dr{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding-block:22px;border-top:1px solid #ffffff26;align-items:baseline}
+.c6 .dr:last-child{border-bottom:1px solid #ffffff26}
+.c6 .dr .old{font-size:17px;color:#8d90ad;text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px}
+.c6 .dr .new{font:400 clamp(26px,2.6vw,36px)/1.1 var(--f-s)}
+.c6 .dh{display:grid;grid-template-columns:1fr 1fr;gap:30px;font:500 12px/1 var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:#8d90ad;padding-bottom:14px}
+@media (max-width:640px){.c6 .dr,.c6 .dh{grid-template-columns:1fr;gap:8px}.c6 .dh span:last-child{display:none}}
+
+.c6 .week-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--ink);margin-top:46px}
+.c6 .wk{padding:22px 18px 10px 0;display:grid;gap:10px;align-content:start}
+.c6 .wk+.wk{border-left:1px solid #d9dcef;padding-left:18px}
+.c6 .wk .k{font:italic 400 56px/.8 var(--f-s);color:var(--cobalt)}
+.c6 .wk b{font:700 17px/1.2 var(--f-b)}
+.c6 .wk p{font-size:14.5px;line-height:1.5;color:var(--mute)}
+.c6 .calm{margin-top:28px;font-size:15px;line-height:1.6;color:var(--mute);max-width:80ch;padding:16px 18px;background:var(--fog);border-left:4px solid var(--red)}
+@media (max-width:980px){.c6 .week-grid{grid-template-columns:1fr}.c6 .wk+.wk{border-left:0;padding-left:0;border-top:1px solid #d9dcef}.c6 .wk{grid-template-columns:60px 1fr;column-gap:16px}.c6 .wk .k{grid-row:span 2}}
+
+.c6 .final{background:var(--cobalt);color:#fff;position:relative;overflow:hidden;padding-block:0}
+.c6 .final-grid{display:grid;grid-template-columns:1.2fr 1fr;min-height:520px}
+.c6 .final-l{padding-block:80px;padding-right:40px;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.c6 .final h2{font-size:clamp(52px,7.4vw,116px);margin:0}
+.c6 .final h2 i{color:#fff}
+.c6 .final h2 .u{position:relative}
+.c6 .final h2 .u::after{content:"";position:absolute;left:0;right:0;bottom:.02em;height:.07em;background:var(--red)}
+.c6 .final p{font-size:18px;line-height:1.55;max-width:44ch;opacity:.92}
+.c6 .final-r{position:relative;margin-right:calc(-1 * max(20px,env(safe-area-inset-right,0px)))}
+.c6 .final-r .duo{position:absolute;inset:0;background:var(--cobalt-d)}
+@media (max-width:900px){.c6 .final-grid{grid-template-columns:1fr}.c6 .final-l{padding-right:0;padding-block:60px 40px}.c6 .final-r{height:340px;margin-left:calc(-1 * max(20px,env(safe-area-inset-left,0px)))}}
+.c6 .limit{background:var(--fog);font-size:14px;line-height:1.6;color:var(--mute)}
+.c6 .limit .wrap{display:grid;grid-template-columns:260px 1fr;gap:30px;padding-block:34px}
+.c6 .limit b{font:italic 400 30px/1.05 var(--f-s);color:var(--ink)}
+@media (max-width:760px){.c6 .limit .wrap{grid-template-columns:1fr;gap:10px}}
+.c6 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px;font:500 12px/1.4 var(--f-m);color:var(--mute);letter-spacing:.04em}
+
+.c4,.c5,.c6{overflow:hidden}
+</style>
+
+<header class="switch">
+  <div class="wrap">
+    <span class="lbl">FASTHIT · Landing concepts</span>
+    <nav class="tabs" aria-label="Concepts">
+      <a href="#stitch" data-k="stitch"><b>01</b>Stitch</a>
+      <a href="#frame" data-k="frame"><b>02</b>Frame</a>
+      <a href="#dugout" data-k="dugout"><b>03</b>Dugout</a>
+      <a href="#chalkline" data-k="chalkline"><b>04</b>Chalkline</a>
+      <a href="#aura" data-k="aura"><b>05</b>Aura</a>
+      <a href="#cutout" data-k="cutout"><b>06</b>Cutout</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ======================= CONCEPT 1 · STITCH ======================= -->
+<div class="concept-wrap" id="v-stitch">
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>01 · Stitch: deporte de día, energía de pelota</h2>
+    <p>Fresco y luminoso. La pelota amarilla y su costura roja son el sistema gráfico: fotos en círculo, curvas punteadas y subrayados de marcador. Tipografía condensada de estadio. Los perfiles se distinguen por su capacidad (1, 3, 100, ∞) como número de uniforme.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#e8ff47"></i>Ball</span>
+    <span class="sw"><i style="background:#e5322d"></i>Stitch</span>
+    <span class="sw"><i style="background:#0f1c4d"></i>Navy</span>
+    <span class="sw"><i style="background:#dbe8ff"></i>Sky</span>
+    <span class="sw"><i style="background:#f4f7fb"></i>Field</span>
+  </div>
+  <div class="fonts">Big Shoulders Display (titulares) · Figtree (texto)</div>
+</div></div>
+
+<main class="concept c1" aria-label="Concept 1: Stitch">
+  <div class="wrap">
+    <nav>
+      <div class="logo"><i></i>Fast-Hit</div>
+      <div class="links"><a href="#stitch">How it works</a><a href="#stitch">Who it's for</a><a href="#stitch">Compare</a><a href="#stitch">Log in</a></div>
+      <a class="btn" href="#stitch">Get started</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Softball swing evaluation</div>
+        <h1>Film it.<br>Score it.<br><em>Swing</em> better.</h1>
+        <p class="lede">Record a side-on swing with your phone. Fast-Hit reads the body, gives you a power score from 1 to 100, five clear signals and one drill for your next practice.</p>
+        <div class="ctas"><a class="btn" href="#stitch">Score my first swing</a><a class="btn alt" href="#stitch">See a sample card</a></div>
+        <div class="trust"><span>No bat sensor</span><span>No lab visit</span><span>Targets for every age</span></div>
+      </div>
+      <div class="ballstage">
+        <div class="ballphoto"><img src="img/swing.jpg" alt="A softball player finishing a swing under stadium lights"></div>
+        <svg class="stitchsvg" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M14 22 C 32 38, 34 64, 16 82" fill="none" stroke="#e5322d" stroke-width="1.1" stroke-dasharray="2.4 1.8" stroke-linecap="round"/>
+          <path d="M86 18 C 66 36, 66 62, 86 84" fill="none" stroke="#e5322d" stroke-width="1.1" stroke-dasharray="2.4 1.8" stroke-linecap="round"/>
+        </svg>
+        <div class="chip">Power <b>74</b></div>
+        <div class="floatcard">
+          <div class="card">
+            <div class="top"><div class="who">Mia R. · Age 13<small>Development · Apr 15</small></div><span class="ver">FH-01.00</span></div>
+            <div class="power"><strong>74</strong><span>/ 100 power</span></div>
+            <ul>
+              <li>Hands <span class="pill ok">On track</span></li>
+              <li>Factor X <span class="pill mid">Getting there</span></li>
+              <li>Spine <span class="pill ok">On track</span></li>
+              <li>Knee <span class="pill bad">Needs work</span></li>
+            </ul>
+            <div class="drill"><b>Next practice</b>Front-knee band hold · 3 × 8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tape" aria-hidden="true"><div>
+    <span>Hands</span><span>Factor X</span><span>Spine</span><span>Elbow</span><span>Knee</span><span>Power 1–100</span><span>Ages 6 to 18+</span>
+    <span>Hands</span><span>Factor X</span><span>Spine</span><span>Elbow</span><span>Knee</span><span>Power 1–100</span><span>Ages 6 to 18+</span>
+  </div></div>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head"><h2>Three steps.<br>One practice plan.</h2><p>You already film practice. Fast-Hit turns that clip into a card the whole family and the coach can read the same way.</p></div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>Film side-on</h3><p>Full body in frame, 4 to 5 meters away, phone steady. No net or post blocking the player.</p><span class="meta">MP4 · MOV · WebM · up to 150 MB</span></div>
+        <div class="step"><span class="n">2</span><h3>Upload &amp; add age</h3><p>Age sets the target zone: Getting started, Development or Elite. A 12-year-old is never measured against adult numbers.</p><span class="meta">Card ready in seconds</span></div>
+        <div class="step"><span class="n">3</span><h3>Train the drill</h3><p>Every signal that needs attention comes with a short drill. When everything is on track, the card celebrates it.</p><span class="meta">Then film again and compare</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="profiles">
+    <div class="wrap">
+      <div class="sec-head"><h2>Pick your<br>position.</h2><p>Four profiles, one engine. Choose by how many hitters you follow.</p></div>
+      <div class="pgrid">
+        <article class="pcard">
+          <div class="ph"><img src="img/player.jpg" alt="A softball player smiling at the field"><span class="big">1</span></div>
+          <div class="body"><h3>Player</h3><span class="cap">Your swings only</span>
+            <ul><li>Score your own videos</li><li>Power score + 5 signals</li><li>Compare any two of your swings</li><li>Full history of your progress</li></ul>
+            <a class="btn alt" href="#stitch">Start as a player</a></div>
+        </article>
+        <article class="pcard">
+          <div class="ph"><img src="img/parents.jpg" alt="Two parents sitting with their daughter in the stands"><span class="big">3</span></div>
+          <div class="body"><h3>Parent</h3><span class="cap">Up to 3 players</span>
+            <ul><li>A profile for each kid</li><li>Targets set by each age</li><li>Same card on every phone</li><li>Share progress with the coach</li></ul>
+            <a class="btn alt" href="#stitch">Start as a parent</a></div>
+        </article>
+        <article class="pcard feature">
+          <div class="ph"><img src="img/instructor.jpg" alt="A hitting coach giving instructions to a batter"><span class="big">100</span></div>
+          <div class="body"><h3>Hitting Coach</h3><span class="cap">Up to 100 players</span>
+            <ul><li>Every client in one place</li><li>Before / after for each lesson</li><li>Drill suggestions ready to assign</li><li>Families see the same card you do</li></ul>
+            <a class="btn" href="#stitch">Start coaching</a></div>
+        </article>
+        <article class="pcard">
+          <div class="ph"><img src="img/coach.jpg" alt="A team coach talking to his players in the dugout"><span class="big">∞</span></div>
+          <div class="body"><h3>Team Coach</h3><span class="cap">Unlimited players, teams &amp; rosters</span>
+            <ul><li>Build as many teams as you run</li><li>Rosters by season or age group</li><li>See who needs which drill</li><li>Bring the plan to practice</li></ul>
+            <a class="btn alt" href="#stitch">Set up my teams</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap compare">
+      <div>
+        <div class="eyebrow">Compare two swings</div>
+        <h2 style="margin-top:16px">Progress you can show the group chat.</h2>
+        <p class="lede">Put last month next to today. Fast-Hit shows what went up, what held and what still needs work. Players compare themselves to themselves.</p>
+        <div class="ages"><span>Getting started<b>6–10</b></span><span>Development<b>11–15</b></span><span>Elite<b>16+</b></span></div>
+      </div>
+      <div class="cmp">
+        <div class="scores">
+          <div class="sc"><small>Mar 04</small><b>66</b></div>
+          <span class="arrow">+8</span>
+          <div class="sc now"><small>Apr 15</small><b>74</b></div>
+        </div>
+        <table>
+          <tr><td>Hands</td><td class="up">Getting there → On track</td></tr>
+          <tr><td>Factor X</td><td class="up">Needs work → Getting there</td></tr>
+          <tr><td>Spine</td><td class="held">Held · On track</td></tr>
+          <tr><td>Knee</td><td class="held">Held · Needs work</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <svg class="stitchbg" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M-5 6 C 25 22, 25 40, -5 56" fill="none" stroke="#e5322d" stroke-width=".5" stroke-dasharray="1.6 1.2"/>
+      <path d="M105 6 C 75 22, 75 40, 105 56" fill="none" stroke="#e5322d" stroke-width=".5" stroke-dasharray="1.6 1.2"/>
+    </svg>
+    <div class="wrap">
+      <h2>Your next swing<br>starts on Tuesday.</h2>
+      <p>Film it at practice, upload it at home, bring the drill back to the cage.</p>
+      <a class="btn" href="#stitch">Get started with Fast-Hit</a>
+    </div>
+  </section>
+  <div class="wrap"><footer><span>© 2026 Fast-Hit · Practice guide, not a medical device.</span><span>English · Español</span></footer></div>
+</main>
+</div>
+
+<!-- ======================= CONCEPT 2 · FRAME ======================= -->
+<div class="concept-wrap" id="v-frame" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>02 · Frame: laboratorio de movimiento</h2>
+    <p>Profesional y tecnológico, pero cálido. Noche índigo con el esqueleto de pose dibujado sobre el swing real, lecturas de ángulos y una línea de tiempo de video. Los planes muestran su capacidad como asientos: 1, 3, una cuadrícula de 100 y ∞.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#11123a"></i>Indigo</span>
+    <span class="sw"><i style="background:#ff6a55"></i>Coral</span>
+    <span class="sw"><i style="background:#5df2c4"></i>Mint</span>
+    <span class="sw"><i style="background:#eceaff"></i>Ice</span>
+    <span class="sw"><i style="background:#1f2260"></i>Panel</span>
+  </div>
+  <div class="fonts">Unbounded (titulares) · Manrope (texto) · JetBrains Mono (datos)</div>
+</div></div>
+
+<main class="concept c2" aria-label="Concept 2: Frame">
+  <div class="wrap">
+    <nav>
+      <div class="logo"><i></i>fast-hit</div>
+      <div class="links"><a href="#frame">Signals</a><a href="#frame">Compare</a><a href="#frame">Plans</a><a href="#frame">Log in</a></div>
+      <a class="btn sm" href="#frame">Start free</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="tc">Swing read · 00:02.14</div>
+        <h1>Every swing,<br><span class="o">read</span> <span class="m">frame</span><br>by frame.</h1>
+        <p class="lede">Fast-Hit tracks the body in your phone video and turns it into a power score, five signals and one drill. The same file always opens the same card, on any screen.</p>
+        <div class="ctas"><a class="btn" href="#frame">Upload a swing</a><a class="btn ghost" href="#frame">How scoring works</a></div>
+        <div class="facts">
+          <div><b>1–100</b><span>Power score</span></div>
+          <div><b>5</b><span>Swing signals</span></div>
+          <div><b>3</b><span>Age tracks</span></div>
+        </div>
+      </div>
+      <div class="viewer">
+        <img src="img/swing.jpg" alt="A softball player mid-swing with a pose skeleton drawn over her body">
+        <svg viewBox="0 0 1152 864" aria-hidden="true">
+          <path class="bat" d="M655 262 L880 185"/>
+          <path class="arc" d="M520 300 A 70 70 0 0 1 600 250"/>
+          <path class="bone" d="M578 132 L585 168 L540 202 M585 168 L560 390 M540 202 L655 262 M585 168 L645 335 L655 262 M560 390 L445 580 L385 715 M560 390 L600 610 L715 690"/>
+          <g>
+            <circle class="joint" cx="578" cy="128" r="14"/><circle class="joint" cx="540" cy="202" r="10"/><circle class="joint" cx="645" cy="335" r="10"/>
+            <circle class="joint" cx="655" cy="262" r="10"/><circle class="joint" cx="560" cy="390" r="11"/><circle class="joint" cx="445" cy="580" r="10"/>
+            <circle class="joint" cx="385" cy="715" r="10"/><circle class="joint" cx="600" cy="610" r="10"/><circle class="joint" cx="715" cy="690" r="10"/>
+          </g>
+        </svg>
+        <div class="hud a">FACTOR X<b class="k">41°</b></div>
+        <div class="hud b">HANDS<b class="k">On track</b></div>
+        <div class="hud c">FRONT KNEE<b class="w">Needs work</b></div>
+        <div class="scrub"><div class="bar"><em></em><i></i></div><div class="t"><span>LOAD</span><span>LAUNCH</span><span>CONTACT</span><span>FINISH</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="signals">
+    <div class="wrap">
+      <span class="lbl">What the card reads</span>
+      <h2>Three signals build power.<br>Two protect the body.</h2>
+      <p class="sub">Each signal lights up On track, Getting there or Needs work against the target for the player's age.</p>
+      <div class="sig-grid">
+        <div class="sig pw"><span class="g">Power · 40%</span><svg viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="none" stroke="#2f3275" stroke-width="6"/><circle cx="27" cy="27" r="22" fill="none" stroke="#5df2c4" stroke-width="6" stroke-dasharray="55 200" transform="rotate(-90 27 27)"/></svg><h3>Hands</h3><p>How fast the hands reach contact for the player's age.</p></div>
+        <div class="sig pw"><span class="g">Power · 35%</span><svg viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="none" stroke="#2f3275" stroke-width="6"/><circle cx="27" cy="27" r="22" fill="none" stroke="#5df2c4" stroke-width="6" stroke-dasharray="48 200" transform="rotate(-90 27 27)"/></svg><h3>Factor X</h3><p>The twist between shoulders and hips that loads the swing.</p></div>
+        <div class="sig pw"><span class="g">Power · 25%</span><svg viewBox="0 0 54 54"><circle cx="27" cy="27" r="22" fill="none" stroke="#2f3275" stroke-width="6"/><circle cx="27" cy="27" r="22" fill="none" stroke="#5df2c4" stroke-width="6" stroke-dasharray="35 200" transform="rotate(-90 27 27)"/></svg><h3>Spine</h3><p>Whether the torso stays firm through contact.</p></div>
+        <div class="sig cr"><span class="g">Movement care</span><svg viewBox="0 0 54 54"><path d="M10 40 L27 18 L44 30" fill="none" stroke="#ff6a55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="18" r="5" fill="#11123a" stroke="#ff6a55" stroke-width="3"/></svg><h3>Elbow</h3><p>Whether the back arm stays with the swing or flies out early.</p></div>
+        <div class="sig cr"><span class="g">Movement care</span><svg viewBox="0 0 54 54"><path d="M20 8 L30 28 L22 48" fill="none" stroke="#ff6a55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="28" r="5" fill="#11123a" stroke="#ff6a55" stroke-width="3"/></svg><h3>Knee</h3><p>Whether the front leg stays stable, ready to brake with control.</p></div>
+      </div>
+      <div class="legend"><span><i style="background:#5df2c4"></i>On track</span><span><i style="background:#d8d6ff"></i>Getting there</span><span><i style="background:#ffd9d3"></i>Needs work</span><span style="margin-left:auto">Evaluator Fast-Hit-01.00</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap two">
+      <div>
+        <span class="lbl">Swing vs. swing</span>
+        <h2>See what moved between two practices.</h2>
+        <p class="sub">Pick two swings from the same player. The newer one sits next to the earlier one, signal by signal. "Hands went from Getting there to On track." That sentence is what families share.</p>
+        <div class="ctas" style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap"><a class="btn" href="#frame">Compare swings</a></div>
+      </div>
+      <div class="pair">
+        <div class="card">
+          <div class="top"><div class="who">Mar 04<small>Development · 13</small></div></div>
+          <div class="power"><strong>66</strong></div>
+          <ul><li>Hands <span class="pill mid">Getting there</span></li><li>Factor X <span class="pill bad">Needs work</span></li><li>Spine <span class="pill ok">On track</span></li></ul>
+        </div>
+        <span class="delta">+8 power</span>
+        <div class="card">
+          <div class="top"><div class="who">Apr 15<small>Development · 13</small></div><span class="ver">FH-01.00</span></div>
+          <div class="power"><strong>74</strong></div>
+          <ul><li>Hands <span class="pill ok">On track</span></li><li>Factor X <span class="pill mid">Getting there</span></li><li>Spine <span class="pill ok">On track</span></li></ul>
+          <div class="drill"><b>Next practice</b>Light tube torso turns · 2 × 10</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--bg-2)">
+    <div class="wrap">
+      <span class="lbl">Plans by profile</span>
+      <h2>Built for one hitter or a whole program.</h2>
+      <div class="tiers">
+        <article class="tier">
+          <div class="ttop"><span class="role">Player</span><img class="ava" src="img/player.jpg" alt=""></div>
+          <h3>Just you</h3><p class="cap">Score and track your own videos.</p>
+          <div class="seats lg"><i></i></div>
+          <ul><li>Unlimited swings of your own</li><li>Power score + 5 signals</li><li>Compare and history</li></ul>
+          <a class="btn" href="#frame">Choose Player</a>
+        </article>
+        <article class="tier">
+          <div class="ttop"><span class="role">Parent</span><img class="ava" src="img/parents.jpg" alt=""></div>
+          <h3>Up to 3</h3><p class="cap">One account for the whole family's hitters.</p>
+          <div class="seats lg"><i></i><i></i><i></i></div>
+          <ul><li>A profile per child</li><li>Age targets per profile</li><li>Same card on every device</li></ul>
+          <a class="btn" href="#frame">Choose Parent</a>
+        </article>
+        <article class="tier hl">
+          <div class="ttop"><span class="role">Hitting Coach</span><img class="ava" src="img/instructor.jpg" alt=""></div>
+          <h3>Up to 100</h3><p class="cap">Private lessons with a record of every client.</p>
+          <div class="seats xs" aria-label="100 player seats" id="seats100"></div>
+          <ul><li>Client list with history</li><li>Before / after per lesson</li><li>Drills ready to assign</li></ul>
+          <a class="btn" href="#frame">Choose Hitting Coach</a>
+        </article>
+        <article class="tier">
+          <div class="ttop"><span class="role">Team Coach</span><img class="ava" src="img/coach.jpg" alt=""></div>
+          <h3>Unlimited</h3><p class="cap">Players, teams and rosters without a cap.</p>
+          <div class="seats inf">∞</div>
+          <ul><li>Unlimited teams</li><li>Unlimited rosters per season</li><li>Team view of who needs what</li></ul>
+          <a class="btn" href="#frame">Choose Team Coach</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <span class="lbl">No sensor · No lab</span>
+      <h2>The video you already<br>filmed is enough.</h2>
+      <p>Upload a side-on swing and get the card in seconds. The server scores the file, then deletes it.</p>
+      <div class="ctas"><a class="btn" href="#frame">Score my first swing</a><a class="btn ghost" href="#frame">Talk to us about teams</a></div>
+    </div>
+  </section>
+  <div class="wrap"><footer><span>© 2026 FAST-HIT</span><span>Practice guide · Not a medical device</span><span>EN / ES</span></footer></div>
+</main>
+</div>
+
+<!-- ======================= CONCEPT 3 · DUGOUT ======================= -->
+<div class="concept-wrap" id="v-dugout" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>03 · Dugout: sticker pack del equipo</h2>
+    <p>El más juvenil y creativo. Estética de merch de equipo y redes: contornos gruesos, sombras sólidas, stickers, polaroids con cinta y notas a mano. Cada perfil es una tarjeta coleccionable con su número de jugadoras.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#ff7ab8"></i>Bubblegum</span>
+    <span class="sw"><i style="background:#9ad8ff"></i>Sky</span>
+    <span class="sw"><i style="background:#efff5a"></i>Highlighter</span>
+    <span class="sw"><i style="background:#c9b8ff"></i>Lilac</span>
+    <span class="sw"><i style="background:#1a1240"></i>Ink</span>
+  </div>
+  <div class="fonts">Bricolage Grotesque (titulares) · DM Sans (texto) · Caveat (notas a mano)</div>
+</div></div>
+
+<main class="concept c3" aria-label="Concept 3: Dugout">
+  <div class="wrap">
+    <nav>
+      <div class="logo"><span>fast</span>hit</div>
+      <div class="links"><a href="#dugout">How it works</a><a href="#dugout">Profiles</a><a href="#dugout">Glow-up</a><a href="#dugout">Log in</a></div>
+      <a class="btn" href="#dugout">Join free</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tag">For fastpitch softball · ages 6 to 18+</span>
+        <h1>Your swing<br>has a <span class="hl">score</span>.<br>Go <span class="pk">raise</span> it.</h1>
+        <p class="lede">Film a swing on your phone. Get a power score, five signals and one drill made for your age. Film again next week and watch the glow-up.</p>
+        <div class="ctas"><a class="btn" href="#dugout">Score my swing</a><a class="btn w" href="#dugout">I'm a coach</a></div>
+      </div>
+      <div class="stage">
+        <figure class="polaroid p1"><span class="tapes"></span><img src="img/swing.jpg" alt="A softball player swinging the bat"><figcaption>tuesday practice</figcaption></figure>
+        <figure class="polaroid p2"><img src="img/player.jpg" alt="Portrait of a smiling softball player"><figcaption>#12 Mia</figcaption></figure>
+        <span class="stick s2">Factor X: getting there</span>
+        <div class="card ol">
+          <div class="top"><div class="who">Mia · 13<small>Development</small></div><span class="ver">FH-01.00</span></div>
+          <div class="power"><strong>74</strong><span>power</span></div>
+          <ul><li>Hands <span class="pill ok">On track</span></li><li>Spine <span class="pill ok">On track</span></li><li>Knee <span class="pill bad">Needs work</span></li></ul>
+          <div class="drill"><b>This week</b>Towel under the arm · 3 × 10</div>
+        </div>
+        <span class="stick s1">+8 since March</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div>
+    <span>Hands</span><span>Factor X</span><span>Spine</span><span>Elbow</span><span>Knee</span><span>Power 1–100</span><span>Film</span><span>Score</span><span>Drill</span>
+    <span>Hands</span><span>Factor X</span><span>Spine</span><span>Elbow</span><span>Knee</span><span>Power 1–100</span><span>Film</span><span>Score</span><span>Drill</span>
+  </div></div>
+
+  <section>
+    <div class="wrap">
+      <div class="center">
+        <h2>Film. Upload. <span class="sq">repeat.</span></h2>
+        <p class="sub">The routine fits in a normal week. No sensor on the bat, no lab appointment.</p>
+      </div>
+      <div class="flow">
+        <div class="fstep ol"><span class="n">1</span><h3>Film from the side</h3><p>Full body in frame, 4 to 5 meters away, phone still, facing the light.</p><span class="hand">pro tip: no net in the way!</span></div>
+        <div class="fstep ol"><span class="n">2</span><h3>Get your card</h3><p>Power score, five signals in On track, Getting there or Needs work, and one drill.</p><span class="hand">takes seconds</span></div>
+        <div class="fstep ol"><span class="n">3</span><h3>Do the drill, compare</h3><p>Practice the drill, film again, and put both swings side by side.</p><span class="hand">this is the fun part</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roster">
+    <div class="wrap">
+      <div class="center">
+        <h2>Pick your card.</h2>
+        <p class="sub" style="color:var(--ink)">Four profiles. The number on each card is how many players you can follow.</p>
+      </div>
+      <div class="tcards">
+        <article class="tcard ol">
+          <div class="shot"><img src="img/player.jpg" alt="A softball player at the field"><span class="num">1</span><span class="pos">Player</span></div>
+          <div class="inner"><h3>Player</h3><span class="cap">just my swings</span>
+            <div class="stats"><div><small>Players</small><b>1</b></div><div><small>Teams</small><b>—</b></div></div>
+            <ul><li>Score your own videos</li><li>Compare any two swings</li><li>Your whole swing history</li></ul>
+            <a class="btn w" href="#dugout">I'm a player</a></div>
+        </article>
+        <article class="tcard ol">
+          <div class="shot"><img src="img/parents.jpg" alt="A family sitting in the bleachers"><span class="num">3</span><span class="pos">Parent</span></div>
+          <div class="inner"><h3>Parent</h3><span class="cap">for the whole crew</span>
+            <div class="stats"><div><small>Players</small><b>Up to 3</b></div><div><small>Teams</small><b>—</b></div></div>
+            <ul><li>One profile per kid</li><li>Targets for each age</li><li>Same card as the coach</li></ul>
+            <a class="btn w" href="#dugout">I'm a parent</a></div>
+        </article>
+        <article class="tcard ol">
+          <div class="shot"><img src="img/instructor.jpg" alt="A hitting instructor coaching a batter"><span class="num">100</span><span class="pos">Coach</span></div>
+          <div class="inner"><h3>Hitting Coach</h3><span class="cap">lessons with receipts</span>
+            <div class="stats"><div><small>Players</small><b>Up to 100</b></div><div><small>Teams</small><b>—</b></div></div>
+            <ul><li>All your clients in one list</li><li>Before / after every lesson</li><li>Drills ready to send</li></ul>
+            <a class="btn w" href="#dugout">I coach hitting</a></div>
+        </article>
+        <article class="tcard ol star">
+          <div class="shot"><img src="img/coach.jpg" alt="A team coach with his players in the dugout"><span class="num">∞</span><span class="pos">Team</span></div>
+          <div class="inner"><h3>Team Coach</h3><span class="cap">the whole program</span>
+            <div class="stats"><div><small>Players</small><b>∞</b></div><div><small>Teams &amp; rosters</small><b>∞</b></div></div>
+            <ul><li>Unlimited teams and rosters</li><li>Organize by season or age group</li><li>See who needs which drill</li></ul>
+            <a class="btn" href="#dugout">I run a team</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap glow">
+      <div>
+        <h2>The glow-up,<br><span class="sq">side by side.</span></h2>
+        <p class="sub">Pick two swings from the same player. See what went up, what held and what's next. Every age has its own target, so progress is fair.</p>
+        <div class="ages">
+          <div>Getting started <b>6–10</b></div>
+          <div>Development <b>11–15</b></div>
+          <div>Elite <b>16+</b></div>
+        </div>
+      </div>
+      <div class="glowup ol">
+        <div class="burst"><svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,22 83,13 79,36 99,46 82,60 91,82 67,80 58,99 44,83 22,94 22,70 2,60 18,44 7,23 31,22 38,2" fill="#ff7ab8" stroke="#1a1240" stroke-width="3" stroke-linejoin="round"/></svg><span>+8</span></div>
+        <div class="row">
+          <div class="box then"><small>March 4</small><b>66</b></div>
+          <div class="box now"><small>April 15</small><b>74</b></div>
+        </div>
+        <div class="chips">
+          <span class="up">Hands ↑ On track</span><span class="up">Factor X ↑ Getting there</span><span>Spine held</span><span>Elbow held</span>
+        </div>
+        <div class="card" style="border:2px solid var(--ink);box-shadow:none">
+          <div class="drill" style="margin:0"><b>Next up</b>Front-knee band hold · 3 × 8. Film again in a week.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <div class="finalbox ol">
+        <h2>Ready to see<br>your swing?</h2>
+        <p>Start with the video already on your phone.</p>
+        <div class="ctas"><a class="btn y" href="#dugout">Score my first swing</a><a class="btn w" href="#dugout">Set up a team</a></div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap"><footer><span>© 2026 Fast-Hit · A practice guide for players, families and coaches.</span><span>English · Español</span></footer></div>
+</main>
+</div>
+
+<!-- ======================= 04 · CHALKLINE ======================= -->
+<div id="v-chalkline" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>04 · Chalkline: arcilla de infield y líneas de cal</h2>
+    <p>Cálido, terroso y muy de campo. Rojo arcilla, verde césped profundo y líneas blancas de cal que dibujan la caja de bateo, el esqueleto sobre el video y el diamante. Los perfiles se presentan como una <em>lineup card</em> y la semana se recorre base por base.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#d4582f"></i>Clay</span>
+    <span class="sw"><i style="background:#0f3a2c"></i>Grass</span>
+    <span class="sw"><i style="background:#ffffff"></i>Chalk</span>
+    <span class="sw"><i style="background:#ffd447"></i>Sun</span>
+    <span class="sw"><i style="background:#f2e6dc"></i>Dirt</span>
+  </div>
+  <div class="fonts">Archivo variable: Expanded 900 (titulares) · Condensed 800 (etiquetas) · Regular (texto)</div>
+</div></div>
+
+<main class="c4" aria-label="Concept 4: Chalkline">
+  <div class="topband">
+    <div class="wrap">
+      <nav>
+        <div class="logo disp"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M3 3h20v12l-10 9-10-9z" fill="#fff"/></svg>FASTHIT</div>
+        <div class="links"><a href="#chalkline">Who it is for</a><a href="#chalkline">What it does</a><a href="#chalkline">Progress</a><a href="#chalkline">Your week</a></div>
+        <a class="btn sun" href="#chalkline">Try FASTHIT</a>
+      </nav>
+    </div>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="tag cond">Softball · In development, open for comments</span>
+          <h1 class="disp">The swing evaluation that <span>stays</span> with you.</h1>
+          <p class="lede">A parent or guardian films Tuesday’s swing. A batting instructor or the team coach opens that same video later. Everyone sees the same Power, the same Technique and the same exercise for the next practice.</p>
+          <div class="ctas"><a class="btn" href="#chalkline">Try a swing</a><a class="btn chalk" href="#chalkline">See how it works</a></div>
+          <div class="facts">
+            <div><b>No bat sensor</b>Just your phone</div>
+            <div><b>No lab appointment</b>The video you were already recording</div>
+            <div><b>A target for each age</b>6–10 · 11–15 · 16+</div>
+          </div>
+        </div>
+        <div>
+          <div class="box">
+            <div class="shot">
+              <img src="img/swing.jpg" alt="A softball player mid-swing with a chalk-line skeleton drawn on her body">
+              <svg viewBox="0 0 1152 864" aria-hidden="true">
+                <path class="skel2" d="M578 132 L585 168 L540 202 M585 168 L560 390 M540 202 L655 262 M585 168 L645 335 L655 262 M560 390 L445 580 L385 715 M560 390 L600 610 L715 690"/>
+                <path class="skel" d="M300 790 H860"/>
+                <circle class="jt" cx="578" cy="128" r="13"/><circle class="jt" cx="655" cy="262" r="10"/><circle class="jt" cx="560" cy="390" r="10"/><circle class="jt" cx="445" cy="580" r="10"/><circle class="jt" cx="600" cy="610" r="10"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card heroCard">
+            <div class="topband"><div class="who">Tuesday’s swing<small>Age 12 · Development</small></div><span class="ver">FASTHIT-01.00</span></div>
+            <div class="scores">
+              <div class="s"><span>Power</span><b>72</b><i style="--w:72%"></i></div>
+              <div class="s"><span>Technique</span><b>83</b><i style="--w:83%"></i></div>
+            </div>
+            <p class="note"><b>Index note</b>Your hands get to contact fast. This week, focus on opening the front knee calmly.</p>
+            <div class="chips"><span>Hands</span><span class="m">Time to contact</span><span>Sequence</span><span>Spine</span><span>Elbow</span><span class="r">Knee</span><span>Step</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="strip"><div class="wrap">
+    <div><s>Extra devices on the bat</s></div>
+    <div><s>Confusing swing readings</s></div>
+    <div><s>Adult evaluations for a 12-year-old</s></div>
+    <div>A report that describes everything</div>
+  </div></div>
+
+  <section>
+    <div class="wrap">
+      <span class="eyebrow cond">Who it is for</span>
+      <h2 class="disp">One card.<br>Four lineups.</h2>
+      <p class="sub">You, your family, the instructor and the coach all speak the same language. Pick the profile that matches how many hitters you follow.</p>
+      <div class="lineup">
+        <div class="lu-head"><div>No.</div><div>Profile</div><div>Players</div><div>What you get</div><div></div></div>
+        <div class="lu-row"><div class="no">1</div><div class="pf"><img src="img/player.jpg" alt=""><b>Player</b></div><div class="cap">1<small>Your own swings</small></div><p class="what">Clear numbers and a kind note: what looks strong for your age and what to feel next practice.</p><div class="go"><a class="btn" href="#chalkline">I’m a player</a></div></div>
+        <div class="lu-row"><div class="no">2</div><div class="pf"><img src="img/parents.jpg" alt=""><b>Parent</b></div><div class="cap">Up to 3<small>One profile per child</small></div><p class="what">A concrete piece of good news at dinner: Power moved, Technique held, this week is a short exercise.</p><div class="go"><a class="btn" href="#chalkline">I’m a parent</a></div></div>
+        <div class="lu-row hl"><div class="no">3</div><div class="pf"><img src="img/instructor.jpg" alt=""><b>Hitting Coach</b></div><div class="cap">Up to 100<small>Private lesson clients</small></div><p class="what">A shared read of Power and Technique plus a short drill, so the lesson and the family speak the same language.</p><div class="go"><a class="btn" href="#chalkline">I coach hitting</a></div></div>
+        <div class="lu-row"><div class="no">4</div><div class="pf"><img src="img/coach.jpg" alt=""><b>Team Coach</b></div><div class="cap">Unlimited<small>Players, teams and rosters</small></div><p class="what">Twelve players or a whole program: what to celebrate and what to work on with each athlete.</p><div class="go"><a class="btn" href="#chalkline">I run a team</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="what">
+    <div class="wrap">
+      <span class="eyebrow cond">What it does</span>
+      <h2 class="disp">Your swing,<br>read in seconds.</h2>
+      <p class="sub">A practice guide: not bat speed and not a lab score.</p>
+      <div class="what-grid">
+        <div class="meter">
+          <span class="lbl cond">Score 01</span><h3 class="disp">Power</h3>
+          <p>It tells you if the swing looks strong and quick for her age: how fast the hands move and how soon they meet the ball.</p>
+          <div class="scale"><span class="zone"></span><span class="pin" style="left:72%"><span>72</span></span></div>
+          <div class="scale-l"><span>0</span><span>Good for her age · 70–100</span><span>100</span></div>
+        </div>
+        <div class="meter">
+          <span class="lbl cond">Score 02</span><h3 class="disp">Technique</h3>
+          <p>It tells you if the body works well together: sequence, spine, elbow, knee and step.</p>
+          <div class="scale"><span class="zone"></span><span class="pin" style="left:83%"><span>83</span></span></div>
+          <div class="scale-l"><span>0</span><span>Good for her age · 70–100</span><span>100</span></div>
+        </div>
+        <div class="sig-head"><h3 class="disp">Seven signal cards</h3>
+          <div class="legend"><span><i style="background:#1f9d61"></i>Efficient</span><span><i style="background:#e7a21a"></i>Moderate</span><span><i style="background:#d4382f"></i>Review</span></div></div>
+        <div class="sigs">
+          <div><b>Hands</b><i style="background:#1f9d61"></i><small>Efficient</small></div>
+          <div><b>Time to contact</b><i style="background:#e7a21a"></i><small>Moderate</small></div>
+          <div><b>Sequence</b><i style="background:#1f9d61"></i><small>Efficient</small></div>
+          <div><b>Spine</b><i style="background:#1f9d61"></i><small>Efficient</small></div>
+          <div><b>Elbow</b><i style="background:#1f9d61"></i><small>Efficient</small></div>
+          <div><b>Knee</b><i style="background:#d4382f"></i><small>Review</small></div>
+          <div><b>Step</b><i style="background:#1f9d61"></i><small>Efficient</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week">
+    <div class="wrap">
+      <span class="eyebrow cond">How a week with it feels</span>
+      <h2 class="disp">Film. Read.<br>Practice. Compare.</h2>
+      <div class="diamond-wrap">
+        <div class="diamond">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M50 88 L88 50 L50 12 L12 50 Z" fill="#165040" stroke="#fff" stroke-width=".8"/>
+            <path d="M50 88 L88 50 L50 12 L12 50 Z" fill="none" stroke="#ffd447" stroke-width="1.2" stroke-dasharray="1.5 2.5"/>
+            <circle cx="50" cy="52" r="5" fill="#b9461f"/>
+          </svg>
+          <div class="base home" style="left:50%;top:88%"><span class="n"><span>1</span></span><b>Film from the side</b></div>
+          <div class="base" style="left:84%;top:50%"><span class="n"><span>2</span></span><b>Enter the age</b></div>
+          <div class="base" style="left:50%;top:12%"><span class="n"><span>3</span></span><b>Upload the video</b></div>
+          <div class="base" style="left:16%;top:50%"><span class="n"><span>4</span></span><b>Practice the exercise</b></div>
+        </div>
+        <div>
+          <div class="steps">
+            <div><span class="k">1</span><p><b>Film from the side</b>Camera at hip height, full body, phone still. Face the light. Normal speed, 60 fps preferred. Slow motion is not scored.</p></div>
+            <div><span class="k">2</span><p><b>Enter the age</b>The targets come from there.</p></div>
+            <div><span class="k">3</span><p><b>Upload the video</b>The card arrives with Power, Technique, the Index note and the signal cards.</p></div>
+            <div><span class="k">4</span><p><b>Practice the exercise</b>Before the next recording.</p></div>
+            <div><span class="k">5</span><p><b>Compare (back home)</b>When there is another good swing, FASTHIT shows what improved in Power and Technique.</p></div>
+          </div>
+          <p class="calm">If the full body is not visible, or the take is slow motion, FASTHIT says so calmly and asks for another recording. Only a swing it could read enters history, so the comparison stays fair.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap prog-grid">
+      <div>
+        <span class="eyebrow cond">Two swings, side by side</span>
+        <h2 class="disp">Compared with herself.</h2>
+        <p class="sub">When there are two moments, a month ago and today, FASTHIT puts them side by side. You see what rose in Power, what held in Technique and what still needs work.</p>
+        <p class="quote">“Time to contact improved.” “Sequence held.”</p>
+      </div>
+      <div class="sb">
+        <table>
+          <tr><th></th><th>Oct 12</th><th>Nov 9</th><th>Change</th></tr>
+          <tr><td>Power</td><td class="big">72</td><td class="big">78</td><td class="d">+6</td></tr>
+          <tr><td>Technique</td><td class="big">83</td><td class="big">84</td><td>Held</td></tr>
+          <tr><td>Time to contact</td><td>Review</td><td>Improved</td><td class="d">↑</td></tr>
+        </table>
+        <div class="foot">Each evaluation stays with its date, age, Power and Technique.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <svg class="lines" viewBox="0 0 100 50" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 L50 0 L100 50" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width=".35"/></svg>
+    <div class="wrap">
+      <h2 class="disp">Film the swing.<br><span>Celebrate</span> what moved.</h2>
+      <p>Read Power and Technique. Practice the exercise. When the next swing arrives, compare it with this one.</p>
+      <a class="btn" href="#chalkline">Try FASTHIT</a>
+      <div class="limit"><b class="cond">A kind limit</b>FASTHIT is a practice guide, not a lab score and not bat speed. It reads the movement in the video so this week’s training can be better. If there is pain that does not ease, the path is a doctor.</div>
+    </div>
+  </section>
+  <footer><div class="wrap"><span>© 2026 FASTHIT · In development. Tell us what should get clearer, fairer or more useful.</span><span>EN · ES</span></div></footer>
+</main>
+</div>
+
+<!-- ======================= 05 · AURA ======================= -->
+<div id="v-aura" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>05 · Aura: luz de atardecer, cristal y calma</h2>
+    <p>Suave, aspiracional, tipo app de bienestar. Bruma de durazno, aqua y lima detrás de tarjetas de vidrio esmerilado. Fotos en forma de arco, anillos de progreso y un bento de lo que hace la app. Comunica el tono amable de FASTHIT: mucho ánimo y los pies en la tierra.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#ffb48f"></i>Peach</span>
+    <span class="sw"><i style="background:#7fe1d6"></i>Aqua</span>
+    <span class="sw"><i style="background:#dcf5a2"></i>Lime mist</span>
+    <span class="sw"><i style="background:#ff6a2b"></i>Tangerine</span>
+    <span class="sw"><i style="background:#13203a"></i>Ink</span>
+  </div>
+  <div class="fonts">Syne (titulares) · Inter Tight (texto)</div>
+</div></div>
+
+<main class="c5" aria-label="Concept 5: Aura">
+  <div class="haze" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="wrap">
+    <nav class="glass">
+      <div class="logo"><i></i>fasthit</div>
+      <div class="links"><a href="#aura">Who it is for</a><a href="#aura">What it does</a><a href="#aura">Progress</a><a href="#aura">Your week</a></div>
+      <a class="btn sm t" href="#aura">Try FASTHIT</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill glass">Softball · In development, open for comments</span>
+        <h1>The swing evaluation that <em>stays</em> with you.</h1>
+        <p class="lede">A parent films Tuesday’s swing. The instructor or the team coach opens the same video later. Everyone sees the same Power, the same Technique and the same exercise for the next practice.</p>
+        <div class="ctas"><a class="btn t" href="#aura">Try a swing</a><a class="btn g" href="#aura">See how it works</a></div>
+        <div class="facts">
+          <span class="glass"><b>No bat sensor</b>just your phone</span>
+          <span class="glass"><b>No lab</b>the video you already have</span>
+          <span class="glass"><b>A target per age</b>6–10 · 11–15 · 16+</span>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="arch a1"><img src="img/swing.jpg" alt="A softball player swinging under the evening lights"></div>
+        <div class="arch a2"><img src="img/together.jpg" alt="A player and two adults looking at a phone together"></div>
+        <div class="float glass"><b>+6</b>Power vs. a month ago</div>
+        <div class="card glass">
+          <div class="topband"><div class="who">Tuesday’s swing<small>Age 12 · Development</small></div><span class="ver">FASTHIT-01.00</span></div>
+          <div class="scores">
+            <div class="s"><span>Power</span><b>72</b><i style="--w:72%"></i></div>
+            <div class="s"><span>Technique</span><b>83</b><i style="--w:83%"></i></div>
+          </div>
+          <p class="note"><b>Index note</b>Your hands get to contact fast. This week, focus on opening the front knee calmly.</p>
+          <div class="chips"><span>Hands</span><span class="m">Time to contact</span><span>Sequence</span><span>Spine</span><span>Elbow</span><span class="r">Knee</span><span>Step</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="marq">
+    <span class="glass"><s>Extra devices on the bat</s></span>
+    <span class="glass"><s>Confusing swing readings</s></span>
+    <span class="glass"><s>Adult evaluations for a 12-year-old</s></span>
+    <span class="glass">A report that describes everything</span>
+  </div></div>
+
+  <section>
+    <div class="wrap">
+      <div class="center">
+        <span class="kick">What it does</span>
+        <h2>Your swing, read in seconds.</h2>
+        <p class="sub">A practice guide: not bat speed and not a lab score.</p>
+      </div>
+      <div class="bento">
+        <div class="tile glass t-pw"><div class="row"><div class="ring" style="--p:72%;--c1:#7fe1d6;--c2:#2cc4b0"><b>72</b></div><div><h3>Power</h3><p>If the swing looks strong and quick for her age: how fast the hands move and how soon they meet the ball.</p></div></div></div>
+        <div class="tile glass t-te"><div class="row"><div class="ring" style="--p:83%;--c1:#ffb48f;--c2:#ff6a2b"><b>83</b></div><div><h3>Technique</h3><p>If the body works well together: sequence, spine, elbow, knee and step. <span class="zone">Good for her age · 70–100</span></p></div></div></div>
+        <div class="tile glass t-sg"><h3>Seven signal cards</h3><p>Each one is Efficient, Moderate or Review. Open a card that is not Efficient to read the detail and a short exercise.</p>
+          <div class="chips"><span>Hands</span><span class="m">Time to contact</span><span>Sequence</span><span>Spine</span><span>Elbow</span><span class="r">Knee</span><span>Step</span></div>
+          <div class="legend" style="color:var(--mute)"><span><i style="background:#17b38a"></i>Efficient</span><span><i style="background:#f0a400"></i>Moderate</span><span><i style="background:#ff5a3c"></i>Review</span></div></div>
+        <div class="tile t-nt"><h3>An Index note</h3><q>Your hands get to contact fast. This week, open the front knee calmly.</q></div>
+        <div class="tile glass t-ag"><h3>Targets by age</h3><div class="ages"><div>Getting started <b>6–10</b></div><div>Development <b>11–15</b></div><div>Elite <b>16+</b></div></div></div>
+        <div class="tile glass t-vd"><h3>The swing on the video</h3><div class="mini"><img src="img/swing.jpg" alt=""><svg viewBox="0 0 1152 864" aria-hidden="true"><path d="M578 132 L585 168 L560 390 M585 168 L655 262 M560 390 L445 580 L385 715 M560 390 L600 610 L715 690" fill="none" stroke="#7fe1d6" stroke-width="9" stroke-linecap="round"/></svg></div><p>A skeleton and simple guides on the clip.</p></div>
+        <div class="tile glass t-sm"><h3>Same card, any screen</h3><p>Scored once. A guardian on a phone and a coach on a computer open the same result. The video stays on the phone that uploaded it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="center">
+        <span class="kick">Who it is for</span>
+        <h2>One card. For everyone.</h2>
+        <p class="sub">You, your family, the instructor and the coach all speak the same language.</p>
+      </div>
+      <div class="people">
+        <article class="pp glass"><div class="ph"><img src="img/player.jpg" alt="A softball player smiling"><span class="cnt">Just you</span></div><div class="in"><h3>Player</h3><p>See your own swing with clear numbers and a kind note about what to feel next practice.</p><a class="btn g" href="#aura">Start as a player</a></div></article>
+        <article class="pp glass"><div class="ph"><img src="img/parents.jpg" alt="Parents with their daughter in the stands"><span class="cnt">Up to 3 players</span></div><div class="in"><h3>Parent</h3><p>Good news at dinner: Power moved, Technique held, this week is a short exercise.</p><a class="btn g" href="#aura">Start as a parent</a></div></article>
+        <article class="pp glass hl"><div class="ph"><img src="img/instructor.jpg" alt="A hitting instructor coaching a batter"><span class="cnt">Up to 100 players</span></div><div class="in"><h3>Hitting Coach</h3><p>One swing at a time, with a shared read and a short drill your clients’ families can follow.</p><a class="btn t" href="#aura">Start coaching</a></div></article>
+        <article class="pp glass"><div class="ph"><img src="img/coach.jpg" alt="A coach with his team in the dugout"><span class="cnt">Unlimited · teams &amp; rosters</span></div><div class="in"><h3>Team Coach</h3><p>Unlimited players, teams and rosters. Know what to celebrate and what to work on with each athlete.</p><a class="btn g" href="#aura">Set up my teams</a></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap prog">
+      <div>
+        <span class="kick">Two swings, side by side</span>
+        <h2>You are compared with yourself.</h2>
+        <p class="sub">A month ago and today, together. What rose in Power, what held in Technique and what still needs work. Each evaluation stays with its date, age, Power and Technique.</p>
+      </div>
+      <div class="vs glass">
+        <div class="pair">
+          <div class="side"><small>Oct 12 · a month ago</small><div class="ring" style="--p:72%;--c1:#cfd8e3;--c2:#9fb0c4"><b>72</b></div><span class="tq">Technique 83</span></div>
+          <div class="side"><small>Nov 9 · today</small><div class="ring" style="--p:78%;--c1:#ffb48f;--c2:#ff6a2b"><b>78</b></div><span class="tq">Technique 84</span></div>
+        </div>
+        <div class="msg"><span class="up">Power +6</span><span>Technique held</span><span class="up">Time to contact improved</span><span>Sequence held</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="center"><span class="kick">How a week with it feels</span><h2>Film. Read. Practice. Compare.</h2></div>
+      <div class="flow">
+        <div class="fs"><span class="dot">1</span><b>Film from the side</b><p>Hip height, full body, phone still, 60 fps.</p></div>
+        <div class="fs"><span class="dot">2</span><b>Enter the age</b><p>The targets come from there.</p></div>
+        <div class="fs"><span class="dot">3</span><b>Upload the video</b><p>Power, Technique, the Index note and signals.</p></div>
+        <div class="fs"><span class="dot">4</span><b>Practice the exercise</b><p>Before the next recording.</p></div>
+        <div class="fs"><span class="dot">5</span><b>Compare</b><p>See what improved since last time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <div class="box">
+        <h2>Film the swing.<br>Celebrate what moved.</h2>
+        <p>Read Power and Technique. Practice the exercise. When the next swing arrives, compare it with this one.</p>
+        <div class="ctas"><a class="btn" href="#aura">Try FASTHIT</a></div>
+        <div class="limit"><b>Plenty of encouragement, both feet on the ground.</b>FASTHIT is a practice guide, not a lab score and not bat speed. If there is pain that does not ease, the path is a doctor. The card does not take that place.</div>
+      </div>
+    </div>
+  </section>
+  <div class="wrap"><footer><span>© 2026 FASTHIT · In development. Tell us what should get clearer, fairer or more useful.</span><span>English · Español</span></footer></div>
+</main>
+</div>
+
+<!-- ======================= 06 · CUTOUT ======================= -->
+<div id="v-cutout" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>06 · Cutout: campaña de marca deportiva</h2>
+    <p>Editorial y con mucha actitud, como una campaña de ropa deportiva. Fotos en duotono azul cobalto, titulares serif en itálica a gran escala y un rojo de señal usado con medida. Los perfiles van como lista tipográfica con números enormes (1, 3, 100, ∞) y "lo de siempre" aparece tachado frente a FASTHIT.</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#2a37ff"></i>Cobalt</span>
+    <span class="sw"><i style="background:#ff3b2f"></i>Signal</span>
+    <span class="sw"><i style="background:#0b0c1a"></i>Ink</span>
+    <span class="sw"><i style="background:#eef0f8"></i>Fog</span>
+    <span class="sw"><i style="background:#ffffff"></i>Paper</span>
+  </div>
+  <div class="fonts">Instrument Serif (titulares) · Geist (texto) · Geist Mono (datos)</div>
+</div></div>
+
+<main class="c6" aria-label="Concept 6: Cutout">
+  <div class="head">
+    <div class="wrap">
+      <nav>
+        <div class="logo"><i>f</i>FASTHIT</div>
+        <div class="links"><a href="#cutout">Who it is for</a><a href="#cutout">What it does</a><a href="#cutout">Progress</a><a href="#cutout">Your week</a></div>
+        <a class="btn w sm" href="#cutout">Try FASTHIT</a>
+      </nav>
+    </div>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-l">
+          <div class="meta"><span>Softball</span><span>In development</span><span>Open for comments</span></div>
+          <h1>The swing evaluation that <i class="u">stays</i> with you.</h1>
+          <div>
+            <p class="lede">A parent films Tuesday’s swing. A batting instructor or the team coach opens that same video later. Same Power, same Technique, same exercise for the next practice.</p>
+            <div class="ctas" style="margin-top:26px"><a class="btn r" href="#cutout">Try a swing</a><a class="btn line" href="#cutout">See how it works</a></div>
+          </div>
+        </div>
+        <div class="hero-r">
+          <div class="duo"><img src="img/swing.jpg" alt="A softball player swinging, in blue duotone"></div>
+          <span class="bignum" aria-hidden="true">+6</span>
+          <div class="card">
+            <div class="topband"><div class="who">Tuesday’s swing<small>Age 12 · Development</small></div><span class="ver">FASTHIT-01.00</span></div>
+            <div class="scores">
+              <div class="s"><span>Power</span><b>72</b><i style="--w:72%"></i></div>
+              <div class="s"><span>Technique</span><b>83</b><i style="--w:83%"></i></div>
+            </div>
+            <p class="note"><b>Index note</b>Your hands get to contact fast. This week, focus on opening the front knee calmly.</p>
+            <div class="chips"><span>Hands</span><span class="m">Time to contact</span><span>Sequence</span><span>Spine</span><span>Elbow</span><span class="r">Knee</span><span>Step</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="facts"><div class="wrap">
+    <div><b>No sensor</b>Just your phone.</div>
+    <div><b>No lab</b>The video you were already recording.</div>
+    <div><b>6–10 · 11–15 · 16+</b>A target for each age.</div>
+  </div></div>
+
+  <section>
+    <div class="wrap">
+      <span class="kick">Who it is for</span>
+      <h2>One card. <i>For everyone.</i></h2>
+      <p class="sub">The number is how many hitters each profile follows.</p>
+      <div class="roster">
+        <div class="ro"><div class="n">1<small>Player</small></div><div class="id"><div class="duo"><img src="img/player.jpg" alt=""></div><h3>Player<span>Your swings only</span></h3></div><p>See your own swing with clear numbers and a kind note: what looks strong for your age, and what to feel next practice.</p><div class="go"><a class="btn line" href="#cutout">I’m a player</a></div></div>
+        <div class="ro"><div class="n">3<small>Players</small></div><div class="id"><div class="duo"><img src="img/parents.jpg" alt=""></div><h3>Parent<span>Up to 3 players</span></h3></div><p>A concrete piece of good news at dinner. Power moved, Technique held, this week is a short exercise.</p><div class="go"><a class="btn line" href="#cutout">I’m a parent</a></div></div>
+        <div class="ro hl"><div class="n">100<small>Players</small></div><div class="id"><div class="duo"><img src="img/instructor.jpg" alt=""></div><h3>Hitting Coach<span>Up to 100 players</span></h3></div><p>You work one swing at a time. A shared read of Power and Technique plus a short drill keeps the lesson and the family aligned.</p><div class="go"><a class="btn r" href="#cutout">I coach hitting</a></div></div>
+        <div class="ro"><div class="n">∞<small>Players · teams · rosters</small></div><div class="id"><div class="duo"><img src="img/coach.jpg" alt=""></div><h3>Team Coach<span>Unlimited teams &amp; rosters</span></h3></div><p>Many players, little time and a clear plan: what to celebrate and what to work on with each athlete, team by team.</p><div class="go"><a class="btn line" href="#cutout">I run a team</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reads">
+    <div class="wrap">
+      <span class="kick">What it does</span>
+      <h2>Your swing, <i>read in seconds.</i></h2>
+      <p class="sub">A practice guide: not bat speed and not a lab score.</p>
+      <div class="reads-grid">
+        <div class="rd"><span class="num">72</span><h3>Power</h3><p>If the swing looks strong and quick for her age: how fast the hands move and how soon they meet the ball.</p><div class="bar"><i style="width:72%"></i><em></em></div><div class="bl"><span>0</span><span>Good for her age · 70–100</span></div></div>
+        <div class="rd"><span class="num">83</span><h3>Technique</h3><p>If the body works well together: sequence, spine, elbow, knee and step.</p><div class="bar"><i style="width:83%"></i><em></em></div><div class="bl"><span>0</span><span>Good for her age · 70–100</span></div></div>
+        <div class="rd wide">
+          <div><h3>Seven signal cards</h3><p style="margin-top:10px">Each one is Efficient, Moderate or Review. Open a card that is not Efficient to read the detail and a short exercise.</p></div>
+          <div class="sig7">
+            <div>Hands<small>Efficient</small></div><div class="m">Time to contact<small>Moderate</small></div><div>Sequence<small>Efficient</small></div><div>Spine<small>Efficient</small></div><div>Elbow<small>Efficient</small></div><div class="r">Knee<small>Review</small></div><div>Step<small>Efficient</small></div>
+          </div>
+        </div>
+        <div class="rd"><h3>The swing on the video</h3><div class="duo"><img src="img/swing.jpg" alt=""></div><p>Review the take with a skeleton and simple guides. Labels hide or show. Double-tap opens full screen.</p></div>
+        <div class="rd"><h3>Targets by age</h3><p>A 12-year-old is not measured with an adult number. Reaching Efficient in one stage is the best start for the next.</p>
+          <div class="sig7" style="grid-template-columns:repeat(3,1fr)"><div style="border-color:var(--cobalt)">Getting started<small>6–10</small></div><div style="border-color:var(--cobalt)">Development<small>11–15</small></div><div style="border-color:var(--cobalt)">Elite<small>16+</small></div></div>
+          <h3 style="margin-top:14px">The same card on any screen</h3><p>Scored once. Sending the file again does not change the score. The video stays on the phone that uploaded it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="kick">Two swings, side by side</span>
+      <h2>Compared <i>with herself.</i></h2>
+      <div class="vs">
+        <div class="side"><small>A month ago · Oct 12</small><div class="nums"><div><b>72</b><span>Power</span></div><div><b>83</b><span>Technique</span></div></div><span class="tag">Time to contact · Review</span></div>
+        <div class="side"><small>Today · Nov 9</small><div class="nums"><div><b>78</b><span>Power +6</span></div><div><b>84</b><span>Technique held</span></div></div><span class="tag g">Time to contact · Improved</span></div>
+      </div>
+      <p class="pq">“Time to contact improved.” “Sequence held.”</p>
+    </div>
+  </section>
+
+  <section class="diff">
+    <div class="wrap">
+      <span class="kick">What is different</span>
+      <h2>Built for <i>the real week.</i></h2>
+      <div class="dt">
+        <div class="dh"><span>The usual way</span><span>FASTHIT</span></div>
+        <div class="dr"><span class="old">An extra device or a lab</span><span class="new">The practice video is enough</span></div>
+        <div class="dr"><span class="old">Each adult reads the swing their own way</span><span class="new">The same file opens the same card</span></div>
+        <div class="dr"><span class="old">An 11-year-old measured with adult numbers</span><span class="new">The target grows with age</span></div>
+        <div class="dr"><span class="old">The report describes, and stops there</span><span class="new">Each signal brings an exercise</span></div>
+        <div class="dr"><span class="old">Progress means remembering the old video</span><span class="new">Two videos, side by side</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <span class="kick">How a week with it feels</span>
+      <h2>Film. Read. <i>Practice. Compare.</i></h2>
+      <div class="week-grid">
+        <div class="wk"><span class="k">1</span><b>Film from the side</b><p>Camera at hip height, full body, phone still. Face the light. 60 fps preferred.</p></div>
+        <div class="wk"><span class="k">2</span><b>Enter the age</b><p>The targets come from there.</p></div>
+        <div class="wk"><span class="k">3</span><b>Upload the video</b><p>Power, Technique, the Index note and the signal cards.</p></div>
+        <div class="wk"><span class="k">4</span><b>Practice the exercise</b><p>Before the next recording.</p></div>
+        <div class="wk"><span class="k">5</span><b>Compare</b><p>See what improved in Power and Technique.</p></div>
+      </div>
+      <p class="calm">If the full body is not visible, or the take is slow motion, FASTHIT says so calmly and asks for another recording. Only a swing it could read enters history, so the comparison stays fair.</p>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap final-grid">
+      <div class="final-l">
+        <h2>Film the swing. <i class="u">Celebrate</i> what moved.</h2>
+        <p>Read Power and Technique. Practice the exercise. When the next swing arrives, compare it with this one.</p>
+        <div class="ctas"><a class="btn r" href="#cutout">Try FASTHIT</a><a class="btn line" href="#cutout">Set up a team</a></div>
+      </div>
+      <div class="final-r"><div class="duo"><img src="img/together.jpg" alt="A player and two adults reading a result on a phone"></div></div>
+    </div>
+  </section>
+  <div class="limit"><div class="wrap"><b>Plenty of encouragement, both feet on the ground.</b><p>FASTHIT walks with the player, the family, the batting instructor and the team coach. It is a practice guide, not a lab score and not bat speed. If there is pain that does not ease, the path is a doctor. The card does not take that place.</p></div></div>
+  <footer><div class="wrap"><span>© 2026 FASTHIT</span><span>In development · Tell us what should get clearer, fairer or more useful.</span><span>EN / ES</span></div></footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var s=document.getElementById('seats100'); if(s){var h='';for(var i=0;i<100;i++)h+='<i></i>';s.innerHTML=h;}
+  var keys=['stitch','frame','dugout','chalkline','aura','cutout'];
+  function show(){
+    var k=(location.hash||'').slice(1); if(keys.indexOf(k)<0)k='stitch';
+    keys.forEach(function(x){document.getElementById('v-'+x).hidden=(x!==k);});
+    document.querySelectorAll('.tabs a').forEach(function(a){ if(a.dataset.k===k)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');});
+  }
+  var last=null;
+  window.addEventListener('hashchange',function(){var k=location.hash.slice(1);var changed=keys.indexOf(k)>=0&&k!==last;show();if(changed){last=k;window.scrollTo(0,0);}});
+  last=(location.hash||'#stitch').slice(1);
+  show();
+})();
+</script>
+
+</body></html>
