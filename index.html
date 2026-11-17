@@ -1278,12 +1278,35 @@ p{margin:0}
 .k10 .final .btn{box-shadow:0 4px 0 #0e0d1466}
 .k10 .final .btn.gh{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px #fff}
 .k10 footer{color:var(--mute)}
+
+/* Menu toggle + current landing (00) */
+.switch .wrap{flex-wrap:nowrap;align-items:flex-start}
+.switch .tabs{flex:1;min-width:0}
+.switch .lbl{padding-top:10px;white-space:nowrap}
+.switch .curname{display:none;font:600 14px/1 Figtree,sans-serif;color:var(--shell-fg);padding:9px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.switch .curname b{font:600 11px/1 "JetBrains Mono",monospace;color:var(--shell-mute);margin-right:8px}
+.menu-t{margin-left:auto;flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--shell-line);background:transparent;color:var(--shell-fg);display:grid;place-items:center;cursor:pointer}
+.menu-t:hover{background:#ffffff14}
+.menu-t svg{width:18px;height:18px;transition:transform .2s}
+.switch.collapsed .tabs{display:none}
+.switch.collapsed ~ div .brief{display:none}
+.switch.collapsed .curname{display:block}
+.switch.collapsed .menu-t svg{transform:rotate(180deg)}
+@media (max-width:640px){.switch .lbl{display:none}}
+.cur0{background:#080d18;padding-block:28px 60px}
+.cur0 .wrap{display:grid;gap:16px}
+.cur0 .meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;font:500 12px/1.4 "JetBrains Mono",monospace;color:var(--shell-mute)}
+.cur0 .meta a{color:#d4f000}
+.cur0 figure{margin:0;max-width:1280px;width:100%;justify-self:center;border-radius:14px;overflow:hidden;border:1px solid var(--shell-line);box-shadow:0 30px 80px -30px #000}
+.cur0 img{width:100%;height:auto}
 </style>
 
 <header class="switch">
   <div class="wrap">
     <span class="lbl">FASTHIT · Landing concepts</span>
-    <nav class="tabs" aria-label="Concepts">
+    <span class="curname" id="curname" aria-live="polite"></span>
+    <nav class="tabs" id="tabs" aria-label="Concepts">
+      <a href="#current" data-k="current"><b>00</b>Current landing</a>
       <a href="#stitch" data-k="stitch"><b>01</b>Stitch</a>
       <a href="#frame" data-k="frame"><b>02</b>Frame</a>
       <a href="#dugout" data-k="dugout"><b>03</b>Dugout</a>
@@ -1295,8 +1318,33 @@ p{margin:0}
       <a href="#graphite" data-k="graphite"><b>09</b>Graphite Lab</a>
       <a href="#lavender" data-k="lavender"><b>10</b>Lavender Rush</a>
     </nav>
+    <button class="menu-t" id="menuT" type="button" aria-controls="tabs" aria-expanded="true" aria-label="Hide landing options" title="Hide landing options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
   </div>
 </header>
+
+<!-- ======================= 00 · CURRENT LANDING ======================= -->
+<div id="v-current" hidden>
+<div class="brief"><div class="wrap">
+  <div>
+    <h2>00 · Landing actual (fasthit-landing.vercel.app)</h2>
+    <p>Referencia de la versión publicada hoy, para comparar contra las propuestas. Navy oscuro con acento verde lima, titulares condensados en mayúsculas. Es una captura completa de la página en escritorio (1280 px).</p>
+  </div>
+  <div class="swatches">
+    <span class="sw"><i style="background:#080d18"></i>Bg</span>
+    <span class="sw"><i style="background:#111a2d"></i>Surface</span>
+    <span class="sw"><i style="background:#d4f000"></i>Accent</span>
+    <span class="sw"><i style="background:#f3f5fa"></i>Ink</span>
+    <span class="sw"><i style="background:#9aa6bd"></i>Muted</span>
+  </div>
+  <div class="fonts">Barlow Condensed (titulares) · Outfit (texto)</div>
+</div></div>
+<main class="cur0" aria-label="Option 0: current landing">
+  <div class="wrap">
+    <div class="meta"><span>Captured Nov 17, 2026 · desktop 1280 px</span><a href="https://fasthit-landing.vercel.app/">Open the live site ↗</a></div>
+    <figure><img src="img/current.jpg" alt="Full-page capture of the current FASTHIT landing: dark navy with lime accents, hero 'The swing evaluation that stay with you', sections for who it is for, what it does, progress, the week, what you keep and the final call to action" width="1280" height="7326" loading="lazy"></figure>
+  </div>
+</main>
+</div>
 
 <!-- ======================= CONCEPT 1 · STITCH ======================= -->
 <div class="concept-wrap" id="v-stitch">
@@ -2296,15 +2344,25 @@ p{margin:0}
 <script>
 (function(){
   var s=document.getElementById('seats100'); if(s){var h='';for(var i=0;i<100;i++)h+='<i></i>';s.innerHTML=h;}
-  var keys=['stitch','frame','dugout','chalkline','aura','cutout','floodlight','fuchsia','graphite','lavender'];
+  var keys=['current','stitch','frame','dugout','chalkline','aura','cutout','floodlight','fuchsia','graphite','lavender'];
+  var sw=document.querySelector('.switch'),btn=document.getElementById('menuT'),cn=document.getElementById('curname');
+  function cur(){var k=(location.hash||'').slice(1);return keys.indexOf(k)<0?'current':k;}
   function show(){
-    var k=(location.hash||'').slice(1); if(keys.indexOf(k)<0)k='stitch';
+    var k=cur();
     keys.forEach(function(x){document.getElementById('v-'+x).hidden=(x!==k);});
-    document.querySelectorAll('.tabs a').forEach(function(a){ if(a.dataset.k===k)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');});
+    document.querySelectorAll('.tabs a').forEach(function(a){ if(a.dataset.k===k){a.setAttribute('aria-current','page');cn.innerHTML=a.innerHTML;} else a.removeAttribute('aria-current');});
   }
-  var last=null;
-  window.addEventListener('hashchange',function(){var k=location.hash.slice(1);var changed=keys.indexOf(k)>=0&&k!==last;show();if(changed){last=k;window.scrollTo(0,0);}});
-  last=(location.hash||'#stitch').slice(1);
+  function setMenu(open){
+    sw.classList.toggle('collapsed',!open);
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    var t=open?'Hide landing options':'Show landing options';btn.setAttribute('aria-label',t);btn.title=t;
+    try{localStorage.setItem('fh-menu',open?'1':'0');}catch(e){}
+  }
+  btn.addEventListener('click',function(){setMenu(sw.classList.contains('collapsed'));});
+  var saved=null;try{saved=localStorage.getItem('fh-menu');}catch(e){}
+  setMenu(saved!=='0');
+  var last=cur();
+  window.addEventListener('hashchange',function(){var k=cur();show();if(k!==last){last=k;window.scrollTo(0,0);}});
   show();
 })();
 </script>
